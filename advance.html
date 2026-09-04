@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Damoma Advanced Area</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="dashboard-page">
+  <header class="navbar">
+    <a class="brand" href="index.html"><span>D</span> Damoma</a>
+    <div class="nav-actions"><a class="btn btn-outline" href="index.html">Back to site</a><button id="logoutBtn" class="btn btn-primary">Logout</button></div>
+  </header>
+  <main class="dashboard">
+    <div class="dashboard-heading"><div><p class="eyebrow">ADVANCED AREA</p><h1>Studio resources</h1></div></div>
+    <div class="admin-card">
+      <h2>Welcome back</h2>
+      <p id="advanceInfo">Checking your session...</p>
+      <div class="feature-list">
+        <div><strong>Portfolio</strong><span>Manage published creative work.</span></div>
+        <div><strong>Customers</strong><span>Prepare the platform for client workflows.</span></div>
+        <div><strong>Uploads</strong><span>Storage integration is ready to be connected to your Supabase bucket.</span></div>
+      </div>
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) location.href = "index.html#auth";
+      else document.getElementById("advanceInfo").textContent = `Signed in as ${user.email}`;
+      document.getElementById("logoutBtn")?.addEventListener("click", async () => {
+        await supabase.auth.signOut();
+        location.href = "index.html";
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Damoma Admin</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="dashboard-page">
+  <header class="navbar">
+    <a class="brand" href="index.html"><span>D</span> Damoma Admin</a>
+    <div class="nav-actions"><a class="btn btn-outline" href="index.html">Website</a><button id="logoutBtn" class="btn btn-primary">Logout</button></div>
+  </header>
+  <main class="dashboard">
+    <div class="dashboard-heading"><div><p class="eyebrow">PRIVATE DASHBOARD</p><h1>Manage your studio</h1></div><p id="adminStatus" class="status"></p></div>
+    <section class="admin-grid">
+      <div class="admin-card">
+        <h2>Add portfolio work</h2>
+        <form id="portfolioForm">
+          <input id="workTitle" required placeholder="Work title">
+          <textarea id="workDescription" rows="3" placeholder="Description"></textarea>
+          <input id="workImage" type="url" placeholder="Image URL">
+          <select id="workType"><option value="image">Image</option><option value="video">Video</option></select>
+          <label class="check"><input id="workFeatured" type="checkbox"> Featured work</label>
+          <button class="btn btn-primary" type="submit">Publish work</button>
+        </form>
+        <p id="portfolioStatus" class="status"></p>
+      </div>
+      <div class="admin-card">
+        <h2>Account</h2>
+        <p id="profileInfo">Checking account...</p>
+        <a class="btn btn-outline full" href="advance.html">Open advanced area</a>
+      </div>
+    </section>
+    <section class="admin-card">
+      <h2>Portfolio records</h2>
+      <div id="adminPortfolio" class="portfolio-grid compact"></div>
+    </section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="script.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

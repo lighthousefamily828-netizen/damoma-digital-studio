@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Damoma Creative Studio — graphic design, digital creativity and visual solutions.">
+  <title>Damoma Creative Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="loader" class="loader"><div class="loader-ring"></div><p>Damoma Creative Studio</p></div>
+
+  <header class="navbar">
+    <a class="brand" href="index.html"><span>D</span> Damoma</a>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#works">Works</a>
+      <a href="#services">Services</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <a id="authBtn" class="btn btn-outline" href="#auth">Sign in</a>
+      <a id="adminBtn" class="btn btn-primary hidden" href="admin.html">Admin</a>
+    </div>
+  </header>
+
+  <main>
+    <section id="home" class="hero">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <p class="eyebrow">DAMOMA CREATIVE STUDIO</p>
+        <h1>We turn ideas into <span>visual experiences.</span></h1>
+        <p class="hero-text">Professional graphic design, photo editing and digital creative work built to make your brand stand out.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#works">Explore our work</a>
+          <a class="btn btn-glass" href="#contact">Start a project</a>
+        </div>
+      </div>
+      <div class="hero-scroll">Scroll to explore ↓</div>
+    </section>
+
+    <section id="works" class="section">
+      <div class="section-heading">
+        <div><p class="eyebrow">PORTFOLIO</p><h2>Selected works</h2></div>
+        <div id="filters" class="filters"></div>
+      </div>
+      <div id="portfolioGrid" class="portfolio-grid">
+        <div class="empty-state">Loading our latest work...</div>
+      </div>
+    </section>
+
+    <section id="services" class="section section-dark">
+      <p class="eyebrow">WHAT WE DO</p>
+      <h2>Creative services</h2>
+      <div id="servicesGrid" class="service-grid">
+        <article class="service-card"><span>01</span><h3>Graphic Design</h3><p>Flyers, branding, social media designs and promotional visuals.</p></article>
+        <article class="service-card"><span>02</span><h3>Photo Editing</h3><p>Clean, cinematic and professional image enhancement.</p></article>
+        <article class="service-card"><span>03</span><h3>Digital Projects</h3><p>Modern digital experiences and creative web solutions.</p></article>
+      </div>
+    </section>
+
+    <section id="contact" class="section contact-section">
+      <div>
+        <p class="eyebrow">LET'S CREATE</p>
+        <h2>Have a project in mind?</h2>
+        <p>Tell us what you need and we’ll help turn the idea into something professional.</p>
+      </div>
+      <form id="contactForm" class="contact-form">
+        <input id="contactName" required placeholder="Your name">
+        <input id="contactEmail" type="email" required placeholder="Email address">
+        <input id="contactSubject" placeholder="Subject">
+        <textarea id="contactMessage" required rows="5" placeholder="Tell us about your project"></textarea>
+        <button class="btn btn-primary" type="submit">Send message</button>
+        <p id="contactStatus" class="status"></p>
+      </form>
+    </section>
+
+    <section id="auth" class="auth-section">
+      <div class="auth-card">
+        <p class="eyebrow">MEMBERS AREA</p>
+        <h2 id="authTitle">Sign in</h2>
+        <p id="authSubtitle">Sign in to access your Damoma account.</p>
+        <form id="authForm">
+          <input id="authEmail" type="email" required placeholder="Email address">
+          <input id="authPassword" type="password" minlength="6" required placeholder="Password">
+          <input id="authName" class="hidden" placeholder="Full name">
+          <button id="authSubmit" class="btn btn-primary" type="submit">Sign in</button>
+        </form>
+        <button id="toggleAuth" class="text-button">Create an account</button>
+        <p id="authStatus" class="status"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer><p>© <span id="year"></span> Damoma Creative Studio. All rights reserved.</p></footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
