@@ -1,0 +1,17 @@
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const menu=$("#mobileMenu"),backdrop=$("#menuBackdrop"),modal=$("#loginModal"),toast=$("#toast");
+function openMenu(){menu.classList.add("open");backdrop.classList.add("open")}function closeMenu(){menu.classList.remove("open");backdrop.classList.remove("open")}
+function openLogin(){modal.classList.add("open")}function closeLogin(){modal.classList.remove("open")}
+$("#menuBtn").onclick=openMenu;$("#menuClose").onclick=closeMenu;backdrop.onclick=closeMenu;$("#loginBtn").onclick=openLogin;$("#mobileLogin").onclick=()=>{closeMenu();openLogin()};$$("[data-close]").forEach(x=>x.onclick=closeLogin);
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeMenu();closeLogin()}});
+const searchPanel=$("#searchPanel"),searchInput=$("#searchInput"),results=$("#searchResults");
+$("#searchBtn").onclick=()=>{searchPanel.classList.toggle("open");if(searchPanel.classList.contains("open"))searchInput.focus()};
+$("#searchClose").onclick=()=>searchPanel.classList.remove("open");
+const searchable=[["Graphic Design","Flyers, posters, banners, invitations and social media designs.","#services"],["Logo & Branding","Logos, brand identity and business stationery.","#services"],["Photo Editing","Retouching, background replacement and enhancement.","#services"],["Video Editing","Reels, promotional, church and event videos.","#services"],["Web Design","Business, portfolio, booking and e-commerce websites.","#services"],["Pricing","Starting prices and service packages.","#pricing"],["Portfolio","Selected creative work and project categories.","#portfolio"]];
+searchInput.oninput=()=>{const q=searchInput.value.trim().toLowerCase();if(!q){results.innerHTML="";return}const hits=searchable.filter(x=>(x[0]+" "+x[1]).toLowerCase().includes(q)).slice(0,5);results.innerHTML=hits.length?hits.map(x=>`<a href="${x[2]}"><strong>${x[0]}</strong><br>${x[1]}</a>`).join(""):"No matching service found.";results.querySelectorAll("a").forEach(a=>a.onclick=()=>searchPanel.classList.remove("open"))};
+$$(".filter").forEach(btn=>btn.onclick=()=>{$$(".filter").forEach(b=>b.classList.remove("active"));btn.classList.add("active");const cat=btn.dataset.filter;$$(".work-card").forEach(card=>card.style.display=cat==="all"||card.dataset.cat===cat?"block":"none")});
+const serviceSelect=$("#serviceSelect");$$("[data-service]").forEach(btn=>btn.onclick=()=>{serviceSelect.value=btn.dataset.service});
+function showToast(msg){toast.textContent=msg;toast.classList.add("show");setTimeout(()=>toast.classList.remove("show"),3200)}
+$("#bookingForm").onsubmit=e=>{e.preventDefault();const fd=new FormData(e.currentTarget),message=`Hello Damoma Creative Studio,%0A%0AI'd like to book a service.%0A%0AName: ${encodeURIComponent(fd.get("name"))}%0AContact: ${encodeURIComponent(fd.get("contact"))}%0AService: ${encodeURIComponent(fd.get("service")||"General enquiry")}%0AProject details: ${encodeURIComponent(fd.get("details"))}`;window.open(`https://wa.me/2349064505247?text=${message}`,"_blank");showToast("Opening WhatsApp with your project brief…");e.currentTarget.reset()};
+$("#demoLogin").onclick=()=>showToast("Supabase authentication will be connected next.");
+$("#demoCreate").onclick=()=>showToast("Account creation will be connected next.");
