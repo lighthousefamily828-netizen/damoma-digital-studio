@@ -8,7 +8,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  document.getElementById("profileInfo").textContent = `${profile.name || "Admin"} • ${profile.email || user.email}`;
+  const adminEmail = document.getElementById("adminEmail");
+  if (adminEmail) adminEmail.textContent = profile.email || user.email || "Administrator";
+  const adminStatus = document.getElementById("adminStatus");
+  if (adminStatus) adminStatus.textContent = profile.name || "Administrator";
   setupImagePreview();
   setupAdminUploadButton();
   await loadAdminStats();
@@ -156,5 +159,13 @@ async function loadAdminStats() {
   set("requestCount", requests.count || 0);
   set("requestBadge", requests.count || 0);
   const email = document.getElementById("adminEmail");
-  if (email) email.textContent = document.getElementById("profileInfo")?.textContent || "Administrator";
+  if (email && !email.textContent) email.textContent = "Administrator";
 }
+
+
+document.getElementById("adminMenuToggle")?.addEventListener("click", () => {
+  document.getElementById("adminSidebar")?.classList.toggle("open");
+});
+document.querySelectorAll(".admin-nav-item").forEach(link => {
+  link.addEventListener("click", () => document.getElementById("adminSidebar")?.classList.remove("open"));
+});
