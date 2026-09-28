@@ -94,8 +94,10 @@ function portfolioItem(item){
 }
 
 function wirePortfolioForm(){
-  const input=document.getElementById("workImage"),zone=document.getElementById("uploadZone"),preview=document.getElementById("imagePreview");
+  const input=document.getElementById("workImage"),zone=document.getElementById("uploadZone");
+  if(!input||!zone)return;
   input.addEventListener("change",()=>showPreview(input.files?.[0]));
+  zone.addEventListener("click",e=>{if(e.target!==input) input.click()});
   ["dragenter","dragover"].forEach(e=>zone.addEventListener(e,x=>{x.preventDefault();zone.classList.add("dragging")}));
   ["dragleave","drop"].forEach(e=>zone.addEventListener(e,x=>{x.preventDefault();zone.classList.remove("dragging")}));
   zone.addEventListener("drop",e=>{const f=e.dataTransfer.files?.[0];if(!f)return;const dt=new DataTransfer();dt.items.add(f);input.files=dt.files;showPreview(f)});
@@ -121,9 +123,12 @@ async function publishWork(e){
     if(file){
       const ext=(file.name.split(".").pop()||"jpg").toLowerCase(),safe=title.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,50)||"work";
       const path=OWNER_ID+"/"+Date.now()+"-"+safe+"."+ext;
-      const up=await supabase.storage.from("portfolio").upload(path,file,{upsert:false,contentType:file.type,cacheControl:"3600"});
+      const bucket=supabase.storage.from("portfolio");
+      const up=await bucket.upload(path,file,{upsert:false,contentType:file.type,cacheControl:"3600"});
       if(up.error)throw new Error("Upload failed: "+up.error.message);
-      payload.image_url=supabase.storage.from("portfolio").getPublicUrl(path).data.publicUrl;
+      const publicResult=bucket.getPublicUrl(path);
+      if(!publicResult?.data?.publicUrl) throw new Error("Upload succeeded but the image URL could not be created.");
+      payload.image_url=publicResult.data.publicUrl;
     }
     let result;
     if(editingId) result=await supabase.from("portfolio_items").update(payload).eq("id",editingId).select("id").single();
