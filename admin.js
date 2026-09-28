@@ -121,7 +121,13 @@ if (document.readyState === "loading") {
   initAdminDashboard();
 }
 
-function showAdminStatus(message, isError = false) {\n  const el = document.getElementById("portfolioStatus");\n  if (!el) return;\n  el.textContent = String(message || "");\n  el.className = "status" + (isError ? " error" : "");\n}\n\nfunction setupImagePreview() {
+function showAdminStatus(message, isError = false) {
+  const el = document.getElementById("portfolioStatus");
+  if (!el) return;
+  el.textContent = String(message || "");
+  el.className = "status" + (isError ? " error" : "");
+}
+\nfunction setupImagePreview() {
   const input = document.getElementById("workImage");
   const preview = document.getElementById("imagePreview");
   if (!input || !preview) return;
