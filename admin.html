@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#0b0714">
   <title>Damoma Studio — Admin</title>
-  <link rel="stylesheet" href="style.css?v=20260928-admin2">
+  <link rel="stylesheet" href="style.css?v=20260928-rebuild4">
 </head>
 <body class="dm-admin">
   <aside class="dm-sidebar" id="dmSidebar">
@@ -56,10 +56,13 @@
         <div class="dm-grid2 dm-upload-grid">
           <form id="portfolioForm" class="dm-card">
             <div class="dm-card-head"><div><h3 id="formTitle">Add new work</h3><p>Images are stored securely in Supabase Storage.</p></div></div>
-            <div class="dm-upload" id="uploadZone">
-              <input id="workImage" type="file" accept="image/jpeg,image/png,image/webp,image/gif" aria-label="Choose portfolio image">
-              <span class="dm-upload-icon">↑</span><strong>Choose an image</strong><span>or drag and drop</span><small>JPG, PNG, WEBP or GIF · max 10MB</small>
-              <img id="imagePreview" alt="Preview">
+            <div class="dm-upload dm-upload-native" id="uploadZone">
+              <div class="dm-upload-icon">↑</div>
+              <strong>Select portfolio image</strong>
+              <span>Use the button below to choose from your phone</span>
+              <input id="workImage" type="file" accept="image/jpeg,image/png,image/webp,image/gif">
+              <small>JPG, PNG, WEBP or GIF · maximum 10MB</small>
+              <img id="imagePreview" alt="Selected image preview">
             </div>
             <div class="dm-form-grid">
               <label>Title *<input id="workTitle" required placeholder="e.g. Church Anniversary Flyer"></label>
@@ -93,6 +96,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
-  <script src="admin.js?v=20260928-admin2"></script>
+  <script src="admin.js?v=20260928-rebuild4"></script>
 </body>
 </html>
