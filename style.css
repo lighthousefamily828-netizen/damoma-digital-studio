@@ -13,3 +13,9 @@
 @media(max-width:950px){.dm-sidebar{width:230px}.dm-main{margin-left:230px}.dm-stats{grid-template-columns:1fr 1fr}.dm-service-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:760px){.dm-sidebar{transform:translateX(-100%);transition:.25s;width:270px;box-shadow:20px 0 50px rgba(0,0,0,.5)}.dm-sidebar.open{transform:none}.dm-main{margin-left:0}.dm-top{padding:0 16px;height:68px}.dm-menu{display:block}.dm-content{padding:20px 14px 40px}.dm-welcome{display:block;padding:20px}.dm-welcome .dm-primary{margin-top:16px;width:100%}.dm-welcome h2,.dm-section-head h2{font-size:25px}.dm-grid2,.dm-form-grid,.dm-service-grid{grid-template-columns:1fr}.dm-stats{grid-template-columns:1fr 1fr}.dm-card{padding:15px}.dm-request{display:block}.dm-request select{margin-top:10px}.dm-top-right{font-size:0}.dm-top-right .dm-avatar{font-size:12px}.dm-library{max-height:none}}
 @media(max-width:430px){.dm-stats{grid-template-columns:1fr}.dm-library-item{grid-template-columns:72px 1fr}.dm-library-item>img{width:72px;height:72px}.dm-actions button{font-size:8px;padding:5px}.dm-form-actions{display:grid;grid-template-columns:1fr}.dm-form-actions button{width:100%}}
+
+/* Portfolio uploader rebuild — native mobile file picker */
+.dm-upload-native{gap:8px!important;min-height:250px!important}
+.dm-upload-native input[type=file]{position:relative!important;inset:auto!important;width:100%!important;height:auto!important;opacity:1!important;pointer-events:auto!important;cursor:pointer!important;z-index:10!important;background:#17111f!important;border:1px solid #49385c!important;border-radius:9px!important;padding:12px!important;color:#fff!important;margin:12px 0 2px!important}
+.dm-upload-native input[type=file]::file-selector-button{border:0;border-radius:8px;background:#7c45ff;color:#fff;padding:10px 14px;margin-right:10px;font-weight:800;cursor:pointer}
+.dm-upload-native img.show{display:block!important;max-height:180px!important}
