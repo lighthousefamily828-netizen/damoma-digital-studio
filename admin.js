@@ -94,50 +94,72 @@ function portfolioItem(item){
 }
 
 function wirePortfolioForm(){
-  const input=document.getElementById("workImage"),zone=document.getElementById("uploadZone");
-  if(!input||!zone)return;
+  const input=document.getElementById("workImage");
+  if(!input)return;
   input.addEventListener("change",()=>showPreview(input.files?.[0]));
-  zone.addEventListener("click",e=>{if(e.target!==input){try{input.click()}catch(_){}}});
-  ["dragenter","dragover"].forEach(e=>zone.addEventListener(e,x=>{x.preventDefault();zone.classList.add("dragging")}));
-  ["dragleave","drop"].forEach(e=>zone.addEventListener(e,x=>{x.preventDefault();zone.classList.remove("dragging")}));
-  zone.addEventListener("drop",e=>{const f=e.dataTransfer.files?.[0];if(!f)return;const dt=new DataTransfer();dt.items.add(f);input.files=dt.files;showPreview(f)});
-  document.getElementById("portfolioForm").addEventListener("submit",publishWork);
-  document.getElementById("cancelEdit").addEventListener("click",resetForm);
+  const form=document.getElementById("portfolioForm");
+  if(form)form.addEventListener("submit",publishWork);
+  const cancel=document.getElementById("cancelEdit");
+  if(cancel)cancel.addEventListener("click",resetForm);
 }
 function showPreview(file){
   const img=document.getElementById("imagePreview");
+  if(!img)return;
   if(!file){img.removeAttribute("src");img.classList.remove("show");return;}
   if(!file.type.startsWith("image/")){showFormStatus("Please choose an image file.",true);return;}
   if(file.size>10*1024*1024){showFormStatus("Maximum file size is 10MB.",true);return;}
   img.src=URL.createObjectURL(file);img.classList.add("show");
+  showFormStatus("Image selected. Fill in the title and tap Publish work.");
 }
 async function publishWork(e){
   e.preventDefault();
-  const file=document.getElementById("workImage").files?.[0],title=document.getElementById("workTitle").value.trim();
+  const input=document.getElementById("workImage");
+  const file=input?.files?.[0];
+  const title=document.getElementById("workTitle").value.trim();
   if(!title)return showFormStatus("Enter a title.",true);
-  if(!editingId&&!file)return showFormStatus("Choose an image first.",true);
-  if(file&&(file.size>10*1024*1024||!file.type.startsWith("image/")))return showFormStatus("Use a JPG, PNG, WEBP or GIF under 10MB.",true);
-  const btn=document.getElementById("publishBtn");btn.disabled=true;btn.textContent=editingId?"Saving…":"Uploading…";
+  if(!editingId&&!file)return showFormStatus("Choose an image with the Select image button first.",true);
+  if(file&&(file.size>10*1024*1024||!/^image\/(jpeg|png|webp|gif)$/.test(file.type)))return showFormStatus("Use JPG, PNG, WEBP or GIF under 10MB.",true);
+  const btn=document.getElementById("publishBtn");
+  btn.disabled=true;btn.textContent=editingId?"Saving…":"Uploading…";
   try{
-    const payload={title,description:document.getElementById("workDescription").value.trim()||null,category_id:document.getElementById("workCategory").value||null,is_featured:document.getElementById("workFeatured").checked};
+    const {data:{user},error:ue}=await supabase.auth.getUser();
+    if(ue)throw new Error("Authentication check failed: "+ue.message);
+    if(!user)throw new Error("Your admin session has expired. Sign in again.");
+    if(user.id!==OWNER_ID)throw new Error("This account is not the studio owner account.");
+    const payload={
+      title,
+      description:document.getElementById("workDescription").value.trim()||null,
+      category_id:document.getElementById("workCategory").value||null,
+      is_featured:document.getElementById("workFeatured").checked
+    };
     if(file){
-      const ext=(file.name.split(".").pop()||"jpg").toLowerCase(),safe=title.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,50)||"work";
+      const ext=(file.name.split(".").pop()||"jpg").toLowerCase();
+      const safe=title.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,45)||"work";
       const path=OWNER_ID+"/"+Date.now()+"-"+safe+"."+ext;
-      const bucket=supabase.storage.from("portfolio");
-      const up=await bucket.upload(path,file,{upsert:false,contentType:file.type,cacheControl:"3600"});
-      if(up.error)throw new Error("Upload failed: "+up.error.message);
-      const publicResult=bucket.getPublicUrl(path);
-      if(!publicResult?.data?.publicUrl) throw new Error("Upload succeeded but the image URL could not be created.");
-      payload.image_url=publicResult.data.publicUrl;
+      showFormStatus("1/3 Uploading image to secure storage…");
+      const {error:uploadError}=await supabase.storage.from("portfolio").upload(path,file,{cacheControl:"3600",upsert:false,contentType:file.type});
+      if(uploadError)throw new Error("Storage upload failed: "+uploadError.message);
+      const {data:pub}=supabase.storage.from("portfolio").getPublicUrl(path);
+      if(!pub?.publicUrl)throw new Error("Storage uploaded the image but did not return a public URL.");
+      payload.image_url=pub.publicUrl;
+      showFormStatus("2/3 Image uploaded. Saving portfolio record…");
     }
     let result;
-    if(editingId) result=await supabase.from("portfolio_items").update(payload).eq("id",editingId).select("id").single();
-    else result=await supabase.from("portfolio_items").insert({...payload,is_published:true,media_type:"image"}).select("id").single();
+    if(editingId){
+      result=await supabase.from("portfolio_items").update(payload).eq("id",editingId).select("id").single();
+    }else{
+      result=await supabase.from("portfolio_items").insert({...payload,is_published:true,media_type:"image"}).select("id").single();
+    }
     if(result.error)throw new Error("Database save failed: "+result.error.message);
-    showFormStatus(editingId?"✓ Work updated.":"✓ Work published successfully.");
-    resetForm();await refreshAll();
-  }catch(err){console.error(err);showFormStatus(err.message||"Something went wrong.",true)}
-  finally{btn.disabled=false;btn.textContent="Publish work"}
+    showFormStatus("3/3 Done — portfolio work published.");
+    resetForm();
+    await refreshAll();
+  }catch(err){
+    console.error("Portfolio publish error:",err);
+    showFormStatus(err?.message||"Upload failed. Please try again.",true);
+  }finally{
+    btn.disabled=false;btn.textContent="Publish work";
+  }
 }
 function startEdit(id){
   supabase.from("portfolio_items").select("id,title,description,category_id,is_featured,image_url").eq("id",id).single().then(({data,error})=>{
