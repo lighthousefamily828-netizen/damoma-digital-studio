@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (!file) return setStatus("portfolioStatus", "Please choose a portfolio picture.", true);
     if (!file.type.startsWith("image/")) return setStatus("portfolioStatus", "Please choose an image file.", true);
-    if (file.size > 10 * 1024 * 1024) return setStatus("Image is too large. Maximum size is 10MB.", true);
+    if (file.size > 10 * 1024 * 1024) return setStatus("portfolioStatus", "Image is too large. Maximum size is 10MB.", true);
 
     button.disabled = true;
     button.textContent = "Uploading…";
@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const imageUrl = publicUrlData?.publicUrl;
       if (!imageUrl) throw new Error("Could not create the public image URL.");
 
-      const { error: insertError } = await supabase.from("portfolio_items").insert({
+      const { data: inserted, error: insertError } = await supabase.from("portfolio_items").insert({
         title,
         description,
         image_url: imageUrl,
@@ -62,11 +62,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         media_type: document.getElementById("workType").value,
         is_featured: featured,
         is_published: true
-      });
+      }).select("id,title,image_url,is_published").single();
       if (insertError) {
-        await supabase.storage.from("portfolio").remove([filePath]);
-        throw insertError;
+        throw new Error("Portfolio database insert failed: " + insertError.message);
       }
+      if (!inserted?.id) throw new Error("Portfolio record was not created.");
 
       e.target.reset();
       document.getElementById("imagePreview").innerHTML = "";
