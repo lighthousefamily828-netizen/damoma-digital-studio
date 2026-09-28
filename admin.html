@@ -19,7 +19,10 @@
         <form id="portfolioForm">
           <input id="workTitle" required placeholder="Work title">
           <textarea id="workDescription" rows="3" placeholder="Description"></textarea>
-          <input id="workImage" type="url" placeholder="Image URL">
+          <label class="upload-label" for="workImage">Portfolio image</label>
+          <input id="workImage" type="file" accept="image/jpeg,image/png,image/webp,image/gif">
+          <div id="imagePreview" class="image-preview" aria-live="polite"></div>
+          <p class="form-hint">JPG, PNG, WEBP or GIF • maximum 10MB</p>
           <select id="workType"><option value="image">Image</option><option value="video">Video</option></select>
           <label class="check"><input id="workFeatured" type="checkbox"> Featured work</label>
           <button class="btn btn-primary" type="submit">Publish work</button>
