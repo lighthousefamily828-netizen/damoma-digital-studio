@@ -97,7 +97,7 @@ function wirePortfolioForm(){
   const input=document.getElementById("workImage"),zone=document.getElementById("uploadZone");
   if(!input||!zone)return;
   input.addEventListener("change",()=>showPreview(input.files?.[0]));
-  zone.addEventListener("click",e=>{if(e.target!==input) input.click()});
+  zone.addEventListener("click",e=>{if(e.target!==input){try{input.click()}catch(_){}}});
   ["dragenter","dragover"].forEach(e=>zone.addEventListener(e,x=>{x.preventDefault();zone.classList.add("dragging")}));
   ["dragleave","drop"].forEach(e=>zone.addEventListener(e,x=>{x.preventDefault();zone.classList.remove("dragging")}));
   zone.addEventListener("drop",e=>{const f=e.dataTransfer.files?.[0];if(!f)return;const dt=new DataTransfer();dt.items.add(f);input.files=dt.files;showPreview(f)});
