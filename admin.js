@@ -6,7 +6,7 @@ async function initAdminDashboard() {
 
     const { data: profile, error } = await supabase.from("profiles").select("name,email,role").eq("id", user.id).maybeSingle();
     if (error) throw error;
-    if (profile?.role !== "admin") {
+    if (profile?.role !== "admin" || user.id !== "4599f9ff-a12a-41b0-a24c-c8c3ffd1e82a") {
       document.body.innerHTML = '<main class="dashboard"><div class="admin-card"><h1>Access denied</h1><p>This area is for the studio administrator only.</p><a class="btn btn-primary" href="index.html">Return to website</a></div></main>';
       return;
     }
