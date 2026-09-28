@@ -1,91 +1,125 @@
-document.addEventListener("DOMContentLoaded", async () => {
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return location.href = "index.html#auth";
+async function initAdminDashboard() {
+  try {
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    if (userError) throw userError;
+    if (!user) return location.href = "index.html#auth";
 
-  const { data: profile, error } = await supabase.from("profiles").select("name,email,role").eq("id", user.id).maybeSingle();
-  if (error || profile?.role !== "admin") {
-    document.body.innerHTML = '<main class="dashboard"><div class="admin-card"><h1>Access denied</h1><p>This area is for the studio administrator only.</p><a class="btn btn-primary" href="index.html">Return to website</a></div></main>';
-    return;
-  }
-
-  const adminEmail = document.getElementById("adminEmail");
-  if (adminEmail) adminEmail.textContent = profile.email || user.email || "Administrator";
-  const adminStatus = document.getElementById("adminStatus");
-  if (adminStatus) adminStatus.textContent = profile.name || "Administrator";
-  setupImagePreview();
-  setupAdminUploadButton();
-  await loadAdminStats();
-  await loadAdminPortfolio();
-
-  document.getElementById("portfolioForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const button = e.target.querySelector('button[type="submit"]');
-    const file = document.getElementById("workImage").files?.[0];
-
-    if (!file) return setStatus("portfolioStatus", "Please choose a portfolio picture.", true);
-    if (!file.type.startsWith("image/")) return setStatus("portfolioStatus", "Please choose an image file.", true);
-    if (file.size > 10 * 1024 * 1024) return setStatus("portfolioStatus", "Image is too large. Maximum size is 10MB.", true);
-
-    button.disabled = true;
-    button.textContent = "Uploading…";
-
-    try {
-      const title = document.getElementById("workTitle").value.trim();
-      const description = document.getElementById("workDescription").value.trim();
-      const featured = document.getElementById("workFeatured").checked;
-      const categoryName = document.getElementById("workCategory")?.value || "";
-      let category_id = null;
-      if (categoryName) {
-        const { data: category } = await supabase.from("categories").select("id").eq("name", categoryName).maybeSingle();
-        category_id = category?.id || null;
-      }
-      const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
-      const safeTitle = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 50) || "portfolio";
-      const filePath = `${user.id}/${Date.now()}-${safeTitle}.${ext}`;
-
-      const { error: uploadError } = await supabase.storage.from("portfolio").upload(filePath, file, {
-        cacheControl: "3600",
-        upsert: false,
-        contentType: file.type
-      });
-      if (uploadError) throw uploadError;
-
-      const { data: publicUrlData } = supabase.storage.from("portfolio").getPublicUrl(filePath);
-      const imageUrl = publicUrlData?.publicUrl;
-      if (!imageUrl) throw new Error("Could not create the public image URL.");
-
-      const { data: inserted, error: insertError } = await supabase.from("portfolio_items").insert({
-        title,
-        description,
-        image_url: imageUrl,
-        category_id,
-        media_type: document.getElementById("workType").value,
-        is_featured: featured,
-        is_published: true
-      }).select("id,title,image_url,is_published").single();
-      if (insertError) {
-        throw new Error("Portfolio database insert failed: " + insertError.message);
-      }
-      if (!inserted?.id) throw new Error("Portfolio record was not created.");
-
-      e.target.reset();
-      document.getElementById("imagePreview").innerHTML = "";
-      setStatus("portfolioStatus", "Picture uploaded and published successfully.");
-      await loadAdminStats();
-      await loadAdminPortfolio();
-    } catch (error) {
-      setStatus("portfolioStatus", error.message || "Upload failed. Please try again.", true);
-    } finally {
-      button.disabled = false;
-      button.textContent = "Publish work";
+    const { data: profile, error } = await supabase.from("profiles").select("name,email,role").eq("id", user.id).maybeSingle();
+    if (error) throw error;
+    if (profile?.role !== "admin") {
+      document.body.innerHTML = '<main class="dashboard"><div class="admin-card"><h1>Access denied</h1><p>This area is for the studio administrator only.</p><a class="btn btn-primary" href="index.html">Return to website</a></div></main>';
+      return;
     }
-  });
 
-  document.getElementById("logoutBtn")?.addEventListener("click", async () => {
-    await supabase.auth.signOut();
-    location.href = "index.html";
-  });
-});
+    const adminEmail = document.getElementById("adminEmail");
+    if (adminEmail) adminEmail.textContent = profile.email || user.email || "Administrator";
+    const adminStatus = document.getElementById("adminStatus");
+    if (adminStatus) adminStatus.textContent = profile.name || "Administrator";
+
+    setupImagePreview();
+    setupAdminUploadButton();
+    await loadAdminStats();
+    await loadAdminPortfolio();
+
+    const form = document.getElementById("portfolioForm");
+    if (!form) throw new Error("Portfolio form was not found on this page.");
+    form.noValidate = true;
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      await publishPortfolioWork(user, form);
+    });
+
+    document.getElementById("logoutBtn")?.addEventListener("click", async () => {
+      await supabase.auth.signOut();
+      location.href = "index.html";
+    });
+
+    setStatus("portfolioStatus", "Ready — choose an image, enter a title, then tap Publish Work.");
+  } catch (error) {
+    console.error("Admin dashboard error:", error);
+    setStatus("portfolioStatus", "Dashboard error: " + (error.message || "Please refresh and try again."), true);
+  }
+}
+
+async function publishPortfolioWork(user, form) {
+  const button = form.querySelector('button[type="submit"]');
+  const status = document.getElementById("portfolioStatus");
+  const file = document.getElementById("workImage")?.files?.[0];
+  const title = document.getElementById("workTitle")?.value.trim();
+
+  if (!file) return setStatus("portfolioStatus", "Please choose a portfolio picture first.", true);
+  if (!title) return setStatus("portfolioStatus", "Please enter a Work Title.", true);
+  if (!file.type.startsWith("image/")) return setStatus("portfolioStatus", "Please choose an image file.", true);
+  if (file.size > 10 * 1024 * 1024) return setStatus("portfolioStatus", "Image is too large. Maximum size is 10MB.", true);
+
+  button.disabled = true;
+  button.textContent = "Uploading…";
+  setStatus("portfolioStatus", "Uploading image…");
+
+  try {
+    const description = document.getElementById("workDescription")?.value.trim() || "";
+    const featured = document.getElementById("workFeatured")?.checked || false;
+    const categoryName = document.getElementById("workCategory")?.value || "";
+    let category_id = null;
+
+    if (categoryName) {
+      const categoryResult = await supabase.from("categories").select("id").eq("name", categoryName).maybeSingle();
+      if (categoryResult.error) throw new Error("Category lookup failed: " + categoryResult.error.message);
+      category_id = categoryResult.data?.id || null;
+    }
+
+    const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
+    const safeTitle = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 50) || "portfolio";
+    const filePath = user.id + "/" + Date.now() + "-" + safeTitle + "." + ext;
+
+    const uploadResult = await supabase.storage.from("portfolio").upload(filePath, file, {
+      cacheControl: "3600",
+      upsert: false,
+      contentType: file.type
+    });
+    if (uploadResult.error) throw new Error("Image upload failed: " + uploadResult.error.message);
+
+    setStatus("portfolioStatus", "Image uploaded. Saving portfolio record…");
+
+    const { data: publicUrlData } = supabase.storage.from("portfolio").getPublicUrl(filePath);
+    const imageUrl = publicUrlData?.publicUrl;
+    if (!imageUrl) throw new Error("Could not create the public image URL.");
+
+    const insertResult = await supabase.from("portfolio_items").insert({
+      title,
+      description,
+      image_url: imageUrl,
+      category_id,
+      media_type: document.getElementById("workType")?.value || "image",
+      is_featured: featured,
+      is_published: true
+    }).select("id,title,image_url,is_published").single();
+
+    if (insertResult.error) {
+      throw new Error("Portfolio database insert failed: " + insertResult.error.message);
+    }
+    if (!insertResult.data?.id) throw new Error("Portfolio record was not created.");
+
+    form.reset();
+    document.getElementById("imagePreview").innerHTML = "";
+    setStatus("portfolioStatus", "✓ Picture published successfully and added to the public portfolio.");
+    await loadAdminStats();
+    await loadAdminPortfolio();
+  } catch (error) {
+    console.error("Portfolio publish error:", error);
+    setStatus("portfolioStatus", error.message || "Upload failed. Please try again.", true);
+  } finally {
+    button.disabled = false;
+    button.textContent = "Publish Work";
+  }
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initAdminDashboard);
+} else {
+  initAdminDashboard();
+}
 
 function setupImagePreview() {
   const input = document.getElementById("workImage");
