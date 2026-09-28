@@ -1,123 +1,98 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0b0d16">
-  <title>Damoma Admin Dashboard</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0b0714">
+  <title>Damoma Studio — Admin</title>
+  <link rel="stylesheet" href="style.css?v=20260928-admin2">
 </head>
-<body class="dashboard-page admin-shell">
-  <aside class="admin-sidebar" id="adminSidebar">
-    <a class="admin-brand" href="index.html">
-      <span class="admin-brand-mark">D</span>
-      <span><strong>DAMOMA</strong><small>CREATIVE STUDIO</small></span>
-    </a>
-    <nav class="admin-nav" aria-label="Admin navigation">
-      <a class="admin-nav-item active" href="#dashboard"><span>⌂</span>Dashboard</a>
-      <a class="admin-nav-item" href="#portfolio"><span>▣</span>Portfolio</a>
-      <a class="admin-nav-item" href="#services"><span>⚙</span>Services</a>
-      <a class="admin-nav-item" href="#requests"><span>▤</span>Project Requests <b id="requestBadge">0</b></a>
-      <a class="admin-nav-item" href="#users"><span>♙</span>Users</a>
-      <a class="admin-nav-item" href="#messages"><span>✉</span>Messages</a>
-      <a class="admin-nav-item" href="#settings"><span>⚙</span>Settings</a>
+<body class="dm-admin">
+  <aside class="dm-sidebar" id="dmSidebar">
+    <a class="dm-logo" href="index.html"><img src="assets/damoma-logo.webp?v=4" alt="Damoma Creative Studio"></a>
+    <div class="dm-side-label">WORKSPACE</div>
+    <nav>
+      <button class="dm-nav active" data-view="overview">⌂ <span>Overview</span></button>
+      <button class="dm-nav" data-view="portfolio">▣ <span>Portfolio</span></button>
+      <button class="dm-nav" data-view="requests">▤ <span>Project Requests</span><b id="requestBadge">0</b></button>
+      <button class="dm-nav" data-view="messages">✉ <span>Messages</span><b id="messageBadge">0</b></button>
+      <button class="dm-nav" data-view="services">◆ <span>Services & Pricing</span></button>
     </nav>
-    <div class="admin-sidebar-bottom">
-      <a class="admin-website-link" href="index.html">↗ <span>View Website</span></a>
-      <div class="admin-mini-brand"><span class="admin-brand-mark small">D</span><div><strong>DAMOMA</strong><small>CREATIVE STUDIO</small><em>Designs that speak. Brands that grow.</em></div></div>
+    <div class="dm-side-bottom">
+      <a href="index.html">↗ View Website</a>
+      <button id="dmLogout">⇥ Sign out</button>
     </div>
   </aside>
 
-  <div class="admin-main">
-    <header class="admin-topbar">
-      <button class="admin-mobile-toggle" id="adminMenuToggle" aria-label="Open menu">☰</button>
-      <div class="admin-topbar-spacer"></div>
-      <button class="admin-icon-btn" aria-label="Notifications">♧<i></i></button>
-      <span class="admin-divider"></span>
-      <div class="admin-user">
-        <span class="admin-avatar">A</span>
-        <span><strong>Admin</strong><small id="adminEmail">Administrator</small></span>
-        <button id="adminUserMenu" aria-label="Account menu">⌄</button>
-      </div>
-      <button id="logoutBtn" class="admin-logout">Logout</button>
+  <div class="dm-main">
+    <header class="dm-top">
+      <button id="dmMenu" class="dm-menu" aria-label="Open menu">☰</button>
+      <div><span class="dm-kicker">DAMOMA CREATIVE STUDIO</span><h1 id="viewTitle">Overview</h1></div>
+      <div class="dm-top-right"><span id="adminName">Admin</span><span class="dm-avatar">D</span></div>
     </header>
 
-    <main class="admin-content" id="dashboard">
-      <div class="admin-page-heading">
-        <div>
-          <p class="eyebrow">PRIVATE DASHBOARD</p>
-          <h1>Manage your studio</h1>
-          <p>Upload creative work, manage your portfolio and keep your studio content up to date.</p>
-        </div>
-        <p id="adminStatus" class="status"></p>
-      </div>
+    <main class="dm-content">
+      <div id="dmAlert" class="dm-alert" role="status"></div>
 
-      <section class="admin-stats">
-        <article><span class="admin-stat-icon purple">▣</span><div><small>Portfolio Works</small><strong id="portfolioCount">0</strong></div></article>
-        <article><span class="admin-stat-icon blue">◉</span><div><small>Published</small><strong id="publishedCount">0</strong></div></article>
-        <article><span class="admin-stat-icon gold">◈</span><div><small>Featured</small><strong id="featuredCount">0</strong></div></article>
-        <article><span class="admin-stat-icon green">▤</span><div><small>Requests</small><strong id="requestCount">0</strong></div></article>
+      <section class="dm-view active" data-panel="overview">
+        <div class="dm-welcome">
+          <div><p class="dm-kicker">PRIVATE STUDIO CONTROL</p><h2>Good to see you.</h2><p>Manage your portfolio, requests, messages and services from one place.</p></div>
+          <button class="dm-primary" data-go="portfolio">＋ Add portfolio work</button>
+        </div>
+        <div class="dm-stats">
+          <article><span>▣</span><small>Portfolio</small><strong id="statPortfolio">0</strong></article>
+          <article><span>●</span><small>Published</small><strong id="statPublished">0</strong></article>
+          <article><span>★</span><small>Featured</small><strong id="statFeatured">0</strong></article>
+          <article><span>▤</span><small>Requests</small><strong id="statRequests">0</strong></article>
+        </div>
+        <div class="dm-grid2">
+          <div class="dm-card"><div class="dm-card-head"><div><h3>Recent portfolio</h3><p>Your latest uploaded work.</p></div><button class="dm-link" data-go="portfolio">View all →</button></div><div id="recentPortfolio" class="dm-list"></div></div>
+          <div class="dm-card"><div class="dm-card-head"><div><h3>Latest requests</h3><p>New client enquiries.</p></div><button class="dm-link" data-go="requests">View all →</button></div><div id="recentRequests" class="dm-list"></div></div>
+        </div>
       </section>
 
-      <section class="admin-work-grid" id="portfolio">
-        <div class="admin-panel upload-panel">
-          <div class="admin-panel-title">
-            <div><span class="panel-icon">▣</span><div><h2>Add Portfolio Work</h2><p>Upload your creative work and showcase it on your website.</p></div></div>
-          </div>
-          <form id="portfolioForm" class="admin-form">
-            <div class="admin-field full-field">
-              <label for="workImage">Portfolio Image / Media</label>
-              <div class="professional-upload">
-                <input id="workImage" type="file" accept="image/jpeg,image/png,image/webp,image/gif">
-                <div class="upload-art">⇧</div>
-                <div class="upload-copy"><strong>Choose a file</strong><span>or drag and drop here</span><small>JPG, PNG, WEBP or GIF • Maximum 10MB</small></div>
-                <label class="upload-button" id="chooseFileButton" for="workImage">Choose File</label>
-              </div>
-              <div id="imagePreview" class="image-preview" aria-live="polite"></div>
+      <section class="dm-view" data-panel="portfolio">
+        <div class="dm-section-head"><div><p class="dm-kicker">PORTFOLIO</p><h2>Creative work</h2><p>Upload, publish, feature or remove your work.</p></div></div>
+        <div class="dm-grid2 dm-upload-grid">
+          <form id="portfolioForm" class="dm-card">
+            <div class="dm-card-head"><div><h3 id="formTitle">Add new work</h3><p>Images are stored securely in Supabase Storage.</p></div></div>
+            <label class="dm-upload" id="uploadZone" for="workImage">
+              <input id="workImage" type="file" accept="image/jpeg,image/png,image/webp,image/gif">
+              <span class="dm-upload-icon">↑</span><strong>Choose an image</strong><span>or drag and drop</span><small>JPG, PNG, WEBP or GIF · max 10MB</small>
+              <img id="imagePreview" alt="Preview">
+            </label>
+            <div class="dm-form-grid">
+              <label>Title *<input id="workTitle" required placeholder="e.g. Church Anniversary Flyer"></label>
+              <label>Category<select id="workCategory"><option value="">Select category</option></select></label>
             </div>
-
-            <div class="admin-two-col">
-              <div class="admin-field"><label for="workTitle">Work Title <b>*</b></label><input id="workTitle" required placeholder="e.g. Church Anniversary Flyer"></div>
-              <div class="admin-field"><label for="workCategory">Category</label><select id="workCategory"><option value="">Select category</option><option>Graphic Design</option><option>Branding</option><option>Photo Editing</option><option>Video Editing</option><option>Web Design</option></select></div>
-            </div>
-            <div class="admin-field"><label for="workDescription">Description</label><textarea id="workDescription" rows="3" placeholder="Tell us about this work... (optional)"></textarea></div>
-            <div class="admin-two-col">
-              <div class="admin-field"><label for="workType">Media Type</label><select id="workType"><option value="image">Image</option><option value="video">Video</option></select></div>
-              <label class="featured-toggle"><span><strong>☆ Featured Work</strong><small>Show this work in the featured section</small></span><input id="workFeatured" type="checkbox"><i></i></label>
-            </div>
-            <button class="admin-publish-btn" type="submit">➤ <span>Publish Work</span></button>
-            <p id="portfolioStatus" class="status"></p>
+            <label>Description<textarea id="workDescription" rows="3" placeholder="Short description (optional)"></textarea></label>
+            <label class="dm-check"><input id="workFeatured" type="checkbox"><span><strong>Feature this work</strong><small>Show it as a featured project.</small></span></label>
+            <div class="dm-form-actions"><button type="button" id="cancelEdit" class="dm-secondary hidden">Cancel edit</button><button type="submit" class="dm-primary" id="publishBtn">Publish work</button></div>
+            <p id="portfolioStatus" class="dm-form-status"></p>
           </form>
+          <div class="dm-card"><div class="dm-card-head"><div><h3>Portfolio library</h3><p>Tap any action to manage a work.</p></div></div><div id="portfolioLibrary" class="dm-library"></div></div>
         </div>
-
-        <aside class="admin-panel guide-panel">
-          <div class="guide-title"><span class="panel-icon">✦</span><h2>Upload Guidelines</h2></div>
-          <ul class="guide-list">
-            <li>Supported formats: JPG, PNG, WEBP, GIF</li>
-            <li>Maximum file size: 10 MB</li>
-            <li>Recommended: 1920 × 1080 (landscape) or 1080 × 1350 (portrait)</li>
-            <li>High quality images work best</li>
-            <li>You can upload multiple works, one at a time</li>
-          </ul>
-          <div class="storage-note"><span>☁</span><div><strong>Powered by Supabase Storage</strong><small>Your files are securely stored and automatically hosted for fast, reliable access.</small></div></div>
-          <div class="guide-tips"><div class="guide-title"><span class="panel-icon">✦</span><h2>Tips</h2></div><ul class="guide-list compact-guide"><li>Use clear, high-quality images</li><li>Add a meaningful title and description</li><li>Choose the right category</li><li>Mark your best work as featured</li><li>Preview before publishing</li></ul></div>
-        </aside>
       </section>
 
-      <section class="admin-panel records-panel">
-        <div class="admin-panel-title"><div><span class="panel-icon">▣</span><div><h2>Portfolio Records</h2><p>Manage the work currently stored in your studio portfolio.</p></div></div></div>
-        <div id="adminPortfolio" class="portfolio-grid compact"></div>
+      <section class="dm-view" data-panel="requests">
+        <div class="dm-section-head"><div><p class="dm-kicker">CLIENT WORKFLOW</p><h2>Project requests</h2><p>Review enquiries sent through the website.</p></div></div>
+        <div class="dm-card"><div id="requestsList" class="dm-table-wrap"></div></div>
       </section>
 
-      <section class="admin-panel secondary-panel" id="services">
-        <div class="admin-panel-title"><div><span class="panel-icon">⚙</span><div><h2>Studio Management</h2><p>More management tools are available in the advanced area.</p></div></div><a class="admin-secondary-btn" href="advance.html">Open Advanced Area →</a></div>
+      <section class="dm-view" data-panel="messages">
+        <div class="dm-section-head"><div><p class="dm-kicker">INBOX</p><h2>Messages</h2><p>Messages submitted through the contact form.</p></div></div>
+        <div class="dm-card"><div id="messagesList" class="dm-table-wrap"></div></div>
+      </section>
+
+      <section class="dm-view" data-panel="services">
+        <div class="dm-section-head"><div><p class="dm-kicker">CATALOGUE</p><h2>Services & pricing</h2><p>Your live service catalogue from Supabase.</p></div></div>
+        <div id="servicesList" class="dm-service-grid"></div>
       </section>
     </main>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
-  <script src="script.js"></script>
-  <script src="admin.js?v=20260928-1"></script>
+  <script src="admin.js?v=20260928-admin2"></script>
 </body>
 </html>
