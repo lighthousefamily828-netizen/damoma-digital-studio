@@ -125,9 +125,11 @@ function setupAdminUploadButton() {
   const button = document.getElementById("chooseFileButton");
   const zone = document.querySelector(".professional-upload");
   if (!input) return;
-  button?.addEventListener("click", () => input.click());
+  // The label is linked directly to the file input, which is more reliable on Android/iOS.
+  // Keep the upload zone clickable as well.
   zone?.addEventListener("click", (event) => {
-    if (event.target !== button) input.click();
+    if (event.target.closest("label") || event.target === input) return;
+    input.click();
   });
   zone?.addEventListener("dragover", event => {
     event.preventDefault();
