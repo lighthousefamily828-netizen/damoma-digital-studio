@@ -18,8 +18,8 @@ async function initAdminDashboard() {
 
     setupImagePreview();
     setupAdminUploadButton();
-    await loadAdminStats();
-    await loadAdminPortfolio();
+    await loadAdminStats().catch(error => console.warn("Stats load skipped:", error));
+    await loadAdminPortfolio().catch(error => console.warn("Portfolio list load skipped:", error));
 
     const form = document.getElementById("portfolioForm");
     if (!form) throw new Error("Portfolio form was not found on this page.");
@@ -35,10 +35,10 @@ async function initAdminDashboard() {
       location.href = "index.html";
     });
 
-    setStatus("portfolioStatus", "Ready — choose an image, enter a title, then tap Publish Work.");
+    showAdminStatus("Ready — choose an image, enter a title, then tap Publish Work.");
   } catch (error) {
     console.error("Admin dashboard error:", error);
-    setStatus("portfolioStatus", "Dashboard error: " + (error.message || "Please refresh and try again."), true);
+    showAdminStatus("Dashboard error: " + (error?.message || "Please refresh and try again."), true);
   }
 }
 
@@ -121,7 +121,7 @@ if (document.readyState === "loading") {
   initAdminDashboard();
 }
 
-function setupImagePreview() {
+function showAdminStatus(message, isError = false) {\n  const el = document.getElementById("portfolioStatus");\n  if (!el) return;\n  el.textContent = String(message || "");\n  el.className = "status" + (isError ? " error" : "");\n}\n\nfunction setupImagePreview() {
   const input = document.getElementById("workImage");
   const preview = document.getElementById("imagePreview");
   if (!input || !preview) return;
