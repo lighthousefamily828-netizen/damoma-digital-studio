@@ -23,7 +23,7 @@
   <div class="search-panel" id="searchPanel"><input id="searchInput" type="search" placeholder="Search services, designs, pricing..." autocomplete="off"><button id="searchClose">×</button><div id="searchResults"></div></div>
   <aside class="mobile-menu" id="mobileMenu" aria-hidden="true">
     <div class="menu-top"><img src="https://raw.githubusercontent.com/lighthousefamily828-netizen/damoma-digital-studio/main/assets/damoma-logo.webp?v=3" alt="Damoma"><button id="menuClose" aria-label="Close menu">×</button></div>
-    <div class="menu-account"><button id="mobileLogin">♙<span>Account</span></button><a href="#pricing">₦<span>Pricing</span></a><a href="#contact">✉<span>Contact</span></a></div>
+    <div class="menu-account"><button id="mobileLogin">♙<span>Account</span></button><a id="mobileAdminBtn" class="hidden" href="admin.html">⚙<span>Admin Dashboard</span></a><a href="#pricing">₦<span>Pricing</span></a><a href="#contact">✉<span>Contact</span></a></div>
     <div class="menu-links"><a href="#home">⌂ <span>Home</span></a><a href="#services">✦ <span>Services</span></a><a href="#portfolio">▧ <span>Portfolio</span></a><a href="#pricing">₦ <span>Pricing</span></a><a href="#about">◎ <span>About Damoma</span></a><a href="#contact">✉ <span>Contact</span></a></div>
     <div class="menu-category-title">OUR SERVICES</div>
     <div class="menu-categories"><a href="#services">Graphic Design <span>›</span></a><a href="#services">Logo & Branding <span>›</span></a><a href="#services">Photo Editing <span>›</span></a><a href="#services">Video Editing <span>›</span></a><a href="#services">Web Design <span>›</span></a></div>
@@ -105,6 +105,6 @@
 
   <div class="login-modal" id="loginModal" aria-hidden="true"><div class="modal-backdrop" data-close></div><div class="modal"><button class="modal-close" data-close>×</button><img src="https://raw.githubusercontent.com/lighthousefamily828-netizen/damoma-digital-studio/main/assets/damoma-logo.webp?v=3" alt="Damoma"><span class="kicker">CLIENT ACCOUNT</span><h2>Welcome back.</h2><p>Login/signup will be connected to Supabase Auth in the next build step.</p><input type="email" placeholder="Email address"><input type="password" placeholder="Password"><button class="btn btn-gold full" id="demoLogin">Login</button><div class="or">OR</div><button class="social-login">Continue with Google</button><button class="create-account" id="demoCreate">Create an Account</button></div></div>
   <div class="toast" id="toast"></div>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="app.js?v=20260928-admin"></script>
 </body>
 </html>
