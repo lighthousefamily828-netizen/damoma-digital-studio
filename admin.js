@@ -10,6 +10,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   document.getElementById("profileInfo").textContent = `${profile.name || "Admin"} • ${profile.email || user.email}`;
   setupImagePreview();
+  setupAdminUploadButton();
+  await loadAdminStats();
   await loadAdminPortfolio();
 
   document.getElementById("portfolioForm").addEventListener("submit", async (e) => {
@@ -28,6 +30,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       const title = document.getElementById("workTitle").value.trim();
       const description = document.getElementById("workDescription").value.trim();
       const featured = document.getElementById("workFeatured").checked;
+      const categoryName = document.getElementById("workCategory")?.value || "";
+      let category_id = null;
+      if (categoryName) {
+        const { data: category } = await supabase.from("categories").select("id").eq("name", categoryName).maybeSingle();
+        category_id = category?.id || null;
+      }
       const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
       const safeTitle = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 50) || "portfolio";
       const filePath = `${user.id}/${Date.now()}-${safeTitle}.${ext}`;
@@ -47,7 +55,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         title,
         description,
         image_url: imageUrl,
-        media_type: "image",
+        category_id,
+        media_type: document.getElementById("workType").value,
         is_featured: featured,
         is_published: true
       });
@@ -59,6 +68,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       e.target.reset();
       document.getElementById("imagePreview").innerHTML = "";
       setStatus("portfolioStatus", "Picture uploaded and published successfully.");
+      await loadAdminStats();
       await loadAdminPortfolio();
     } catch (error) {
       setStatus("portfolioStatus", error.message || "Upload failed. Please try again.", true);
@@ -104,4 +114,47 @@ async function loadAdminPortfolio() {
     if (error) return alert(error.message);
     loadAdminPortfolio();
   }));
+}
+
+
+function setupAdminUploadButton() {
+  const input = document.getElementById("workImage");
+  const button = document.getElementById("chooseFileButton");
+  const zone = document.querySelector(".professional-upload");
+  if (!input) return;
+  button?.addEventListener("click", () => input.click());
+  zone?.addEventListener("click", (event) => {
+    if (event.target !== button) input.click();
+  });
+  zone?.addEventListener("dragover", event => {
+    event.preventDefault();
+    zone.classList.add("dragging");
+  });
+  zone?.addEventListener("dragleave", () => zone.classList.remove("dragging"));
+  zone?.addEventListener("drop", event => {
+    event.preventDefault();
+    zone.classList.remove("dragging");
+    const file = event.dataTransfer.files?.[0];
+    if (!file) return;
+    const transfer = new DataTransfer();
+    transfer.items.add(file);
+    input.files = transfer.files;
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+  });
+}
+
+async function loadAdminStats() {
+  const [portfolio, requests] = await Promise.all([
+    supabase.from("portfolio_items").select("id,is_published,is_featured"),
+    supabase.from("project_requests").select("id", { count: "exact", head: true })
+  ]);
+  const rows = portfolio.data || [];
+  const set = (id, value) => { const el = document.getElementById(id); if (el) el.textContent = value; };
+  set("portfolioCount", rows.length);
+  set("publishedCount", rows.filter(x => x.is_published).length);
+  set("featuredCount", rows.filter(x => x.is_featured).length);
+  set("requestCount", requests.count || 0);
+  set("requestBadge", requests.count || 0);
+  const email = document.getElementById("adminEmail");
+  if (email) email.textContent = document.getElementById("profileInfo")?.textContent || "Administrator";
 }
