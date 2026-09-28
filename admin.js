@@ -9,23 +9,63 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   document.getElementById("profileInfo").textContent = `${profile.name || "Admin"} • ${profile.email || user.email}`;
+  setupImagePreview();
   await loadAdminPortfolio();
 
   document.getElementById("portfolioForm").addEventListener("submit", async (e) => {
     e.preventDefault();
-    const payload = {
-      title: document.getElementById("workTitle").value.trim(),
-      description: document.getElementById("workDescription").value.trim(),
-      image_url: document.getElementById("workImage").value.trim() || null,
-      media_type: document.getElementById("workType").value,
-      is_featured: document.getElementById("workFeatured").checked,
-      is_published: true
-    };
-    const { error } = await supabase.from("portfolio_items").insert(payload);
-    if (error) return setStatus("portfolioStatus", error.message, true);
-    e.target.reset();
-    setStatus("portfolioStatus", "Work published.");
-    await loadAdminPortfolio();
+    const button = e.target.querySelector('button[type="submit"]');
+    const file = document.getElementById("workImage").files?.[0];
+
+    if (!file) return setStatus("portfolioStatus", "Please choose a portfolio picture.", true);
+    if (!file.type.startsWith("image/")) return setStatus("portfolioStatus", "Please choose an image file.", true);
+    if (file.size > 10 * 1024 * 1024) return setStatus("Image is too large. Maximum size is 10MB.", true);
+
+    button.disabled = true;
+    button.textContent = "Uploading…";
+
+    try {
+      const title = document.getElementById("workTitle").value.trim();
+      const description = document.getElementById("workDescription").value.trim();
+      const featured = document.getElementById("workFeatured").checked;
+      const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
+      const safeTitle = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 50) || "portfolio";
+      const filePath = `${user.id}/${Date.now()}-${safeTitle}.${ext}`;
+
+      const { error: uploadError } = await supabase.storage.from("portfolio").upload(filePath, file, {
+        cacheControl: "3600",
+        upsert: false,
+        contentType: file.type
+      });
+      if (uploadError) throw uploadError;
+
+      const { data: publicUrlData } = supabase.storage.from("portfolio").getPublicUrl(filePath);
+      const imageUrl = publicUrlData?.publicUrl;
+      if (!imageUrl) throw new Error("Could not create the public image URL.");
+
+      const { error: insertError } = await supabase.from("portfolio_items").insert({
+        title,
+        description,
+        image_url: imageUrl,
+        media_type: "image",
+        is_featured: featured,
+        is_published: true
+      });
+      if (insertError) {
+        await supabase.storage.from("portfolio").remove([filePath]);
+        throw insertError;
+      }
+
+      e.target.reset();
+      document.getElementById("imagePreview").innerHTML = "";
+      setStatus("portfolioStatus", "Picture uploaded and published successfully.");
+      await loadAdminPortfolio();
+    } catch (error) {
+      setStatus("portfolioStatus", error.message || "Upload failed. Please try again.", true);
+    } finally {
+      button.disabled = false;
+      button.textContent = "Publish work";
+    }
   });
 
   document.getElementById("logoutBtn")?.addEventListener("click", async () => {
@@ -33,6 +73,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     location.href = "index.html";
   });
 });
+
+function setupImagePreview() {
+  const input = document.getElementById("workImage");
+  const preview = document.getElementById("imagePreview");
+  if (!input || !preview) return;
+  input.addEventListener("change", () => {
+    const file = input.files?.[0];
+    if (!file) {
+      preview.innerHTML = "";
+      return;
+    }
+    const url = URL.createObjectURL(file);
+    preview.innerHTML = `<img src="${escapeAttr(url)}" alt="Selected portfolio preview">`;
+  });
+}
 
 async function loadAdminPortfolio() {
   const grid = document.getElementById("adminPortfolio");
