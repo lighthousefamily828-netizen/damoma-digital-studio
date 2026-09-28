@@ -56,11 +56,11 @@
         <div class="dm-grid2 dm-upload-grid">
           <form id="portfolioForm" class="dm-card">
             <div class="dm-card-head"><div><h3 id="formTitle">Add new work</h3><p>Images are stored securely in Supabase Storage.</p></div></div>
-            <label class="dm-upload" id="uploadZone" for="workImage">
-              <input id="workImage" type="file" accept="image/jpeg,image/png,image/webp,image/gif">
+            <div class="dm-upload" id="uploadZone">
+              <input id="workImage" type="file" accept="image/jpeg,image/png,image/webp,image/gif" aria-label="Choose portfolio image">
               <span class="dm-upload-icon">↑</span><strong>Choose an image</strong><span>or drag and drop</span><small>JPG, PNG, WEBP or GIF · max 10MB</small>
               <img id="imagePreview" alt="Preview">
-            </label>
+            </div>
             <div class="dm-form-grid">
               <label>Title *<input id="workTitle" required placeholder="e.g. Church Anniversary Flyer"></label>
               <label>Category<select id="workCategory"><option value="">Select category</option></select></label>
