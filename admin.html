@@ -3,43 +3,118 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Damoma Admin</title>
+  <meta name="theme-color" content="#0b0d16">
+  <title>Damoma Admin Dashboard</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="dashboard-page">
-  <header class="navbar">
-    <a class="brand" href="index.html"><span>D</span> Damoma Admin</a>
-    <div class="nav-actions"><a class="btn btn-outline" href="index.html">Website</a><button id="logoutBtn" class="btn btn-primary">Logout</button></div>
-  </header>
-  <main class="dashboard">
-    <div class="dashboard-heading"><div><p class="eyebrow">PRIVATE DASHBOARD</p><h1>Manage your studio</h1></div><p id="adminStatus" class="status"></p></div>
-    <section class="admin-grid">
-      <div class="admin-card">
-        <h2>Add portfolio work</h2>
-        <form id="portfolioForm">
-          <input id="workTitle" required placeholder="Work title">
-          <textarea id="workDescription" rows="3" placeholder="Description"></textarea>
-          <label class="upload-label" for="workImage">Portfolio image</label>
-          <input id="workImage" type="file" accept="image/jpeg,image/png,image/webp,image/gif">
-          <div id="imagePreview" class="image-preview" aria-live="polite"></div>
-          <p class="form-hint">JPG, PNG, WEBP or GIF • maximum 10MB</p>
-          <select id="workType"><option value="image">Image</option><option value="video">Video</option></select>
-          <label class="check"><input id="workFeatured" type="checkbox"> Featured work</label>
-          <button class="btn btn-primary" type="submit">Publish work</button>
-        </form>
-        <p id="portfolioStatus" class="status"></p>
+<body class="dashboard-page admin-shell">
+  <aside class="admin-sidebar" id="adminSidebar">
+    <a class="admin-brand" href="index.html">
+      <span class="admin-brand-mark">D</span>
+      <span><strong>DAMOMA</strong><small>CREATIVE STUDIO</small></span>
+    </a>
+    <nav class="admin-nav" aria-label="Admin navigation">
+      <a class="admin-nav-item active" href="#dashboard"><span>⌂</span>Dashboard</a>
+      <a class="admin-nav-item" href="#portfolio"><span>▣</span>Portfolio</a>
+      <a class="admin-nav-item" href="#services"><span>⚙</span>Services</a>
+      <a class="admin-nav-item" href="#requests"><span>▤</span>Project Requests <b id="requestBadge">0</b></a>
+      <a class="admin-nav-item" href="#users"><span>♙</span>Users</a>
+      <a class="admin-nav-item" href="#messages"><span>✉</span>Messages</a>
+      <a class="admin-nav-item" href="#settings"><span>⚙</span>Settings</a>
+    </nav>
+    <div class="admin-sidebar-bottom">
+      <a class="admin-website-link" href="index.html">↗ <span>View Website</span></a>
+      <div class="admin-mini-brand"><span class="admin-brand-mark small">D</span><div><strong>DAMOMA</strong><small>CREATIVE STUDIO</small><em>Designs that speak. Brands that grow.</em></div></div>
+    </div>
+  </aside>
+
+  <div class="admin-main">
+    <header class="admin-topbar">
+      <button class="admin-mobile-toggle" id="adminMenuToggle" aria-label="Open menu">☰</button>
+      <div class="admin-topbar-spacer"></div>
+      <button class="admin-icon-btn" aria-label="Notifications">♧<i></i></button>
+      <span class="admin-divider"></span>
+      <div class="admin-user">
+        <span class="admin-avatar">A</span>
+        <span><strong>Admin</strong><small id="adminEmail">Administrator</small></span>
+        <button id="adminUserMenu" aria-label="Account menu">⌄</button>
       </div>
-      <div class="admin-card">
-        <h2>Account</h2>
-        <p id="profileInfo">Checking account...</p>
-        <a class="btn btn-outline full" href="advance.html">Open advanced area</a>
+      <button id="logoutBtn" class="admin-logout">Logout</button>
+    </header>
+
+    <main class="admin-content" id="dashboard">
+      <div class="admin-page-heading">
+        <div>
+          <p class="eyebrow">PRIVATE DASHBOARD</p>
+          <h1>Manage your studio</h1>
+          <p>Upload creative work, manage your portfolio and keep your studio content up to date.</p>
+        </div>
+        <p id="adminStatus" class="status"></p>
       </div>
-    </section>
-    <section class="admin-card">
-      <h2>Portfolio records</h2>
-      <div id="adminPortfolio" class="portfolio-grid compact"></div>
-    </section>
-  </main>
+
+      <section class="admin-stats">
+        <article><span class="admin-stat-icon purple">▣</span><div><small>Portfolio Works</small><strong id="portfolioCount">0</strong></div></article>
+        <article><span class="admin-stat-icon blue">◉</span><div><small>Published</small><strong id="publishedCount">0</strong></div></article>
+        <article><span class="admin-stat-icon gold">◈</span><div><small>Featured</small><strong id="featuredCount">0</strong></div></article>
+        <article><span class="admin-stat-icon green">▤</span><div><small>Requests</small><strong id="requestCount">0</strong></div></article>
+      </section>
+
+      <section class="admin-work-grid" id="portfolio">
+        <div class="admin-panel upload-panel">
+          <div class="admin-panel-title">
+            <div><span class="panel-icon">▣</span><div><h2>Add Portfolio Work</h2><p>Upload your creative work and showcase it on your website.</p></div></div>
+          </div>
+          <form id="portfolioForm" class="admin-form">
+            <div class="admin-field full-field">
+              <label for="workImage">Portfolio Image / Media</label>
+              <div class="professional-upload">
+                <input id="workImage" type="file" accept="image/jpeg,image/png,image/webp,image/gif">
+                <div class="upload-art">⇧</div>
+                <div class="upload-copy"><strong>Choose a file</strong><span>or drag and drop here</span><small>JPG, PNG, WEBP or GIF • Maximum 10MB</small></div>
+                <button type="button" class="upload-button" id="chooseFileButton">Choose File</button>
+              </div>
+              <div id="imagePreview" class="image-preview" aria-live="polite"></div>
+            </div>
+
+            <div class="admin-two-col">
+              <div class="admin-field"><label for="workTitle">Work Title <b>*</b></label><input id="workTitle" required placeholder="e.g. Church Anniversary Flyer"></div>
+              <div class="admin-field"><label for="workCategory">Category</label><select id="workCategory"><option value="">Select category</option><option>Graphic Design</option><option>Branding</option><option>Photo Editing</option><option>Video Editing</option><option>Web Design</option></select></div>
+            </div>
+            <div class="admin-field"><label for="workDescription">Description</label><textarea id="workDescription" rows="3" placeholder="Tell us about this work... (optional)"></textarea></div>
+            <div class="admin-two-col">
+              <div class="admin-field"><label for="workType">Media Type</label><select id="workType"><option value="image">Image</option><option value="video">Video</option></select></div>
+              <label class="featured-toggle"><span><strong>☆ Featured Work</strong><small>Show this work in the featured section</small></span><input id="workFeatured" type="checkbox"><i></i></label>
+            </div>
+            <button class="admin-publish-btn" type="submit">➤ <span>Publish Work</span></button>
+            <p id="portfolioStatus" class="status"></p>
+          </form>
+        </div>
+
+        <aside class="admin-panel guide-panel">
+          <div class="guide-title"><span class="panel-icon">✦</span><h2>Upload Guidelines</h2></div>
+          <ul class="guide-list">
+            <li>Supported formats: JPG, PNG, WEBP, GIF</li>
+            <li>Maximum file size: 10 MB</li>
+            <li>Recommended: 1920 × 1080 (landscape) or 1080 × 1350 (portrait)</li>
+            <li>High quality images work best</li>
+            <li>You can upload multiple works, one at a time</li>
+          </ul>
+          <div class="storage-note"><span>☁</span><div><strong>Powered by Supabase Storage</strong><small>Your files are securely stored and automatically hosted for fast, reliable access.</small></div></div>
+          <div class="guide-tips"><div class="guide-title"><span class="panel-icon">✦</span><h2>Tips</h2></div><ul class="guide-list compact-guide"><li>Use clear, high-quality images</li><li>Add a meaningful title and description</li><li>Choose the right category</li><li>Mark your best work as featured</li><li>Preview before publishing</li></ul></div>
+        </aside>
+      </section>
+
+      <section class="admin-panel records-panel">
+        <div class="admin-panel-title"><div><span class="panel-icon">▣</span><div><h2>Portfolio Records</h2><p>Manage the work currently stored in your studio portfolio.</p></div></div></div>
+        <div id="adminPortfolio" class="portfolio-grid compact"></div>
+      </section>
+
+      <section class="admin-panel secondary-panel" id="services">
+        <div class="admin-panel-title"><div><span class="panel-icon">⚙</span><div><h2>Studio Management</h2><p>More management tools are available in the advanced area.</p></div></div><a class="admin-secondary-btn" href="advance.html">Open Advanced Area →</a></div>
+      </section>
+    </main>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
   <script src="script.js"></script>
