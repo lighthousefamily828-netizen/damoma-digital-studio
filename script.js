@@ -1,143 +1,23 @@
-const $ = (id) => document.getElementById(id);
+const $=id=>document.getElementById(id);let novels=[],genres=[],user=null,currentNovel=null,currentChapter=0,signup=false;
 
-document.addEventListener("DOMContentLoaded", async () => {
-  $("year") && ($("year").textContent = new Date().getFullYear());
-
-  setTimeout(() => $("loader")?.classList.add("hide"), 650);
-
-  await loadCategories();
-  await loadPortfolio();
-  await loadServices();
-  await refreshAuthUI();
-
-  $("toggleAuth")?.addEventListener("click", toggleAuthMode);
-  $("authForm")?.addEventListener("submit", handleAuth);
-  $("contactForm")?.addEventListener("submit", handleContact);
-
-  supabase.auth.onAuthStateChange(() => refreshAuthUI());
-});
-
-let signupMode = false;
-
-function toggleAuthMode() {
-  signupMode = !signupMode;
-  $("authTitle").textContent = signupMode ? "Create account" : "Sign in";
-  $("authSubtitle").textContent = signupMode ? "Create your Damoma account." : "Sign in to access your Damoma account.";
-  $("authSubmit").textContent = signupMode ? "Create account" : "Sign in";
-  $("authName").classList.toggle("hidden", !signupMode);
-  $("toggleAuth").textContent = signupMode ? "Already have an account? Sign in" : "Create an account";
-  $("authStatus").textContent = "";
-}
-
-async function handleAuth(e) {
-  e.preventDefault();
-  const email = $("authEmail").value.trim();
-  const password = $("authPassword").value;
-  const name = $("authName").value.trim();
-  setStatus("authStatus", "Please wait...");
-
-  if (signupMode) {
-    const { error } = await supabase.auth.signUp({
-      email, password,
-      options: { data: { name } }
-    });
-    if (error) return setStatus("authStatus", error.message, true);
-    setStatus("authStatus", "Account created. Check your email if confirmation is enabled.");
-  } else {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) return setStatus("authStatus", error.message, true);
-    setStatus("authStatus", "Signed in successfully.");
-    setTimeout(() => location.hash = "works", 500);
-  }
-}
-
-async function refreshAuthUI() {
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) {
-    $("authBtn") && ($("authBtn").textContent = "Sign in");
-    $("adminBtn")?.classList.add("hidden");
-    return;
-  }
-  $("authBtn") && ($("authBtn").textContent = "Account");
-  try {
-    const { data: profile } = await supabase.from("profiles").select("name,role").eq("id", user.id).maybeSingle();
-    if (profile?.role === "admin") $("adminBtn")?.classList.remove("hidden");
-  } catch (_) {}
-}
-
-async function loadCategories() {
-  const box = $("filters");
-  if (!box) return;
-  const { data, error } = await supabase.from("categories").select("id,name,slug").eq("is_active", true).order("sort_order");
-  if (error || !data?.length) return;
-  box.innerHTML = `<button class="filter active" data-category="all">All</button>` +
-    data.map(c => `<button class="filter" data-category="${escapeHtml(c.id)}">${escapeHtml(c.name)}</button>`).join("");
-  box.querySelectorAll(".filter").forEach(btn => btn.addEventListener("click", () => {
-    box.querySelectorAll(".filter").forEach(x => x.classList.remove("active"));
-    btn.classList.add("active");
-    loadPortfolio(btn.dataset.category);
-  }));
-}
-
-async function loadPortfolio(categoryId = "all") {
-  const grid = $("portfolioGrid");
-  if (!grid) return;
-  let query = supabase.from("portfolio_items")
-    .select("id,title,description,image_url,media_url,media_type,is_featured,category_id")
-    .eq("is_published", true)
-    .order("sort_order", { ascending: true })
-    .order("created_at", { ascending: false });
-  if (categoryId !== "all") query = query.eq("category_id", categoryId);
-  const { data, error } = await query;
-  if (error) {
-    grid.innerHTML = `<div class="empty-state">Your portfolio is ready for its first uploads.</div>`;
-    return;
-  }
-  if (!data?.length) {
-    grid.innerHTML = `<div class="empty-state">No published works yet. Add your first work from the admin dashboard.</div>`;
-    return;
-  }
-  grid.innerHTML = data.map(item => {
-    const media = item.media_type === "video" && item.media_url
-      ? `<video src="${escapeAttr(item.media_url)}" muted loop autoplay playsinline></video>`
-      : `<img src="${escapeAttr(item.image_url || item.media_url || "https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&w=900&q=80")}" alt="${escapeAttr(item.title)}" loading="lazy">`;
-    return `<article class="portfolio-card">${media}<div class="portfolio-info"><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.description || "")}</p></div></article>`;
-  }).join("");
-}
-
-async function loadServices() {
-  const grid = $("servicesGrid");
-  if (!grid) return;
-  const { data } = await supabase.from("services").select("name,short_description,description").eq("is_active", true).order("created_at");
-  if (!data?.length) return;
-  grid.innerHTML = data.map((s, i) => `<article class="service-card"><span>${String(i+1).padStart(2,"0")}</span><h3>${escapeHtml(s.name)}</h3><p>${escapeHtml(s.short_description || s.description || "")}</p></article>`).join("");
-}
-
-async function handleContact(e) {
-  e.preventDefault();
-  const { data: { user } } = await supabase.auth.getUser();
-  const payload = {
-    user_id: user?.id || null,
-    name: $("contactName").value.trim(),
-    email: $("contactEmail").value.trim(),
-    subject: $("contactSubject").value.trim(),
-    message: $("contactMessage").value.trim()
-  };
-  const { error } = await supabase.from("contact_messages").insert(payload);
-  if (error) return setStatus("contactStatus", error.message, true);
-  e.target.reset();
-  setStatus("contactStatus", "Message sent successfully.");
-}
-
-function setStatus(id, text, error = false) {
-  const el = $(id);
-  if (el) {
-    el.textContent = text;
-    el.classList.toggle("error", error);
-  }
-}
-
-function escapeHtml(value = "") {
-  return String(value).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[c]));
-}
-function escapeAttr(value = "") { return escapeHtml(value); }
+document.addEventListener('DOMContentLoaded',async()=>{try{$('year').textContent=new Date().getFullYear();bindUI();if(!window.supabaseReady||!supabase){showStartupError('The reading service could not start. Please refresh the page.');return}await Promise.race([restoreAuth(),timeout(6000)]);await Promise.race([loadGenres(),timeout(6000)]);await Promise.race([loadNovels(),timeout(6000)]);}catch(e){console.error(e);showStartupError('The app took too long to connect. Please refresh and try again.')}finally{setTimeout(()=>{$('loader')?.classList.add('hide')},250)}});
+function timeout(ms){return new Promise(r=>setTimeout(r,ms))}
+function showStartupError(msg){const g=$('novelGrid');if(g)g.innerHTML=`<div class="empty">${esc(msg)}<br><button class="primary" style="margin-top:15px" onclick="location.reload()">Refresh</button></div>`}
+function bindUI(){$('authBtn').onclick=()=>location.hash='account';$('search').oninput=()=>renderNovels($('search').value.trim().toLowerCase());$('switchAuth').onclick=()=>{signup=!signup;document.querySelector('.auth-section form').classList.toggle('signup-mode',signup);$('authName').style.display=signup?'block':'none';$('switchAuth').textContent=signup?'Already have an account? Sign in':'Create an account with email'};$('authForm').onsubmit=authSubmit;$('googleBtn').onclick=signInWithGoogle;$('forgotPassword').onclick=forgotPassword;$('closeReader').onclick=closeReader;$('readerFont').onclick=()=>$('chapterContent').classList.toggle('large');$('prevChapter').onclick=()=>openChapter(currentChapter-1);$('nextChapter').onclick=()=>openChapter(currentChapter+1);document.querySelectorAll('[data-genre-link]').forEach(x=>x.onclick=()=>filterGenre(x.dataset.genreLink));$('genres').addEventListener('click',e=>{if(e.target.dataset.genre){filterGenre(e.target.dataset.genre);document.querySelectorAll('#genres button').forEach(b=>b.classList.remove('active'));e.target.classList.add('active')}})}
+async function restoreAuth(){const {data}=await supabase.auth.getUser();user=data.user||null;supabase.auth.onAuthStateChange((_e,s)=>{user=s?.user||null;loadLibrary()});loadLibrary()}
+async function signInWithGoogle(){const status=$('authStatus');status.textContent='Opening Google…';const {error}=await supabase.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.origin+window.location.pathname}});if(error)status.textContent=error.message}
+async function forgotPassword(){const email=$('authEmail').value.trim();if(!email){$('authStatus').textContent='Enter your email address first.';return}const {error}=await supabase.auth.resetPasswordForEmail(email,{redirectTo:window.location.origin+window.location.pathname+'#account'});$('authStatus').textContent=error?error.message:'Password reset instructions have been sent to your email.'}
+async function authSubmit(e){e.preventDefault();const email=$('authEmail').value.trim(),password=$('authPassword').value;$('authStatus').textContent='Please wait…';if(!email||!password){$('authStatus').textContent='Enter your email and password.';return}let res;if(signup)res=await supabase.auth.signUp({email,password,options:{data:{display_name:$('authName').value.trim()}}});else res=await supabase.auth.signInWithPassword({email,password});if(res.error){$('authStatus').textContent=res.error.message;return}$('authStatus').textContent=signup?'Account created. Check your email if confirmation is enabled.':'Signed in successfully.';if(!signup){user=res.data.user;loadLibrary()}}
+async function loadGenres(){const {data,error}=await supabase.from('genres').select('id,name,slug').order('name');if(error){console.error(error);return}genres=data||[]}
+async function loadNovels(){const {data,error}=await supabase.from('novels').select('id,title,slug,author_name,description,cover_url,status,rating,views,is_featured').eq('is_published',true).order('is_featured',{ascending:false}).order('created_at',{ascending:false});if(error){console.error(error);renderNovels();return}novels=data||[];renderNovels()}
+function renderNovels(term=''){const grid=$('novelGrid');let list=novels.filter(n=>!term||`${n.title} ${n.author_name} ${n.description||''}`.toLowerCase().includes(term));$('resultCount').textContent=list.length?`${list.length} novel${list.length===1?'':'s'}`:'';grid.innerHTML=list.length?list.map(n=>novelCard(n)).join(''):'<div class="empty">No published novels found yet. Your library is ready for new stories.</div>'}
+function novelCard(n){return `<article class="novel-card" onclick="openNovel('${n.id}')"><div class="cover">${n.cover_url?`<img src="${attr(n.cover_url)}" alt="${attr(n.title)}">`:`<div class="cover-placeholder">${esc(n.title)}</div>`}</div><div class="novel-info"><h3>${esc(n.title)}</h3><p>${esc(n.author_name||'Unknown author')}</p><div class="novel-meta"><span>★ ${Number(n.rating||0).toFixed(1)}</span><span>${Number(n.views||0).toLocaleString()} views</span></div></div></article>`}
+async function filterGenre(name){if(name==='all'){renderNovels();return}const g=genres.find(x=>x.name.toLowerCase()===name.toLowerCase()||x.slug===name.toLowerCase());if(!g){renderNovels(name.toLowerCase());return}const {data}=await supabase.from('novel_genres').select('novel_id').eq('genre_id',g.id);const ids=new Set((data||[]).map(x=>x.novel_id));const list=novels.filter(n=>ids.has(n.id));$('novelGrid').innerHTML=list.length?list.map(n=>novelCard(n)).join(''):'<div class="empty">No stories in this genre yet.</div>'}
+window.openNovel=async id=>{const n=novels.find(x=>x.id===id);if(!n)return;const {data}=await supabase.from('chapters').select('id,chapter_number,title').eq('novel_id',id).eq('is_published',true).order('chapter_number');if(!data?.length){toast('This novel has no published chapters yet.');return}currentNovel={...n,chapters:data};currentChapter=0;await openChapter(0)};
+async function openChapter(index){if(!currentNovel||index<0||index>=currentNovel.chapters.length)return;currentChapter=index;const c=currentNovel.chapters[index];const {data}=await supabase.from('chapters').select('content,title,chapter_number').eq('id',c.id).single();if(!data)return;$('readerTitle').textContent=currentNovel.title;$('readerMeta').textContent=`${currentNovel.author_name||'Unknown author'} • Chapter ${data.chapter_number}`;$('chapterTitle').textContent=data.title;$('chapterContent').innerHTML=paragraphs(data.content);$('prevChapter').disabled=index===0;$('nextChapter').disabled=index===currentNovel.chapters.length-1;$('reader').classList.remove('hidden');document.body.style.overflow='hidden';if(user)saveProgress(c.id,index)}
+async function saveProgress(chapterId,index){await supabase.from('reading_progress').upsert({user_id:user.id,novel_id:currentNovel.id,chapter_id:chapterId,progress_percent:Math.round(((index+1)/currentNovel.chapters.length)*100),updated_at:new Date().toISOString()})}
+function closeReader(){$('reader').classList.add('hidden');document.body.style.overflow='';loadLibrary()}
+async function loadLibrary(){const grid=$('libraryGrid');if(!user){grid.innerHTML='<div class="empty">Sign in to save novels and continue reading across devices.</div>';return}const {data}=await supabase.from('bookmarks').select('novel_id').eq('user_id',user.id);const ids=new Set((data||[]).map(x=>x.novel_id));const list=novels.filter(n=>ids.has(n.id));grid.innerHTML=list.length?list.map(n=>novelCard(n)).join(''):'<div class="empty">Your library is empty. Open a novel and add it to your reading list.</div>'}
+function paragraphs(t=''){return esc(t).split(/\n\s*\n/).map(p=>`<p>${p.replace(/\n/g,'<br>')}</p>`).join('')}
+function toast(t){let x=document.createElement('div');x.className='toast show';x.textContent=t;document.body.appendChild(x);setTimeout(()=>x.remove(),2400)}
+function esc(v=''){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}function attr(v=''){return esc(v)}
