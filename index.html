@@ -6,7 +6,7 @@
 <title>NovelVerse — Read. Discover. Escape.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=4">
+<link rel="stylesheet" href="styles.css?v=5">
 </head>
 <body>
 <div id="loader"><div class="loader-mark">N</div><span>Loading your library…</span></div>
@@ -17,12 +17,12 @@
 <section class="section" id="browse"><div class="section-head"><div><span class="eyebrow">DISCOVER</span><h2>Trending <em>right now.</em></h2></div><span class="muted" id="resultCount"></span></div><div id="novelGrid" class="novel-grid"><div class="loading-card">Loading novels…</div></div></section>
 <section class="section dark-section"><div class="section-head"><div><span class="eyebrow">GENRES</span><h2>Find your <em>kind of story.</em></h2></div></div><div class="genre-grid"><a href="#browse" data-genre-link="Romance">♥<strong>Romance</strong><small>Love, drama & desire</small></a><a href="#browse" data-genre-link="Werewolf">☾<strong>Werewolf</strong><small>Mates, packs & destiny</small></a><a href="#browse" data-genre-link="Mafia">♠<strong>Mafia</strong><small>Power, danger & loyalty</small></a><a href="#browse" data-genre-link="Fantasy">✦<strong>Fantasy</strong><small>Magic & impossible worlds</small></a><a href="#browse" data-genre-link="System">◈<strong>System</strong><small>Levels, quests & power</small></a><a href="#browse" data-genre-link="Mystery">⌕<strong>Mystery</strong><small>Secrets & investigations</small></a></div></section>
 <section class="section" id="library"><div class="section-head"><div><span class="eyebrow">YOUR SPACE</span><h2>Your <em>library.</em></h2></div></div><div id="libraryGrid" class="novel-grid"><div class="empty">Sign in to save novels and continue reading across devices.</div></div></section>
-<section class="section auth-section" id="account"><div class="auth-card"><div><span class="eyebrow">YOUR ACCOUNT</span><h2>Keep your stories<br><em>with you.</em></h2><p>Create an account or sign in to save bookmarks and reading progress.</p></div><form id="authForm"><input id="authName" class="signup-only" placeholder="Display name"><input id="authEmail" type="email" placeholder="Email address" required><input id="authPassword" type="password" placeholder="Password" minlength="6" required><button class="primary" type="submit">Continue</button><button type="button" id="switchAuth" class="text-btn">Create an account</button><button type="button" id="forgotPassword" class="text-btn">Forgot password?</button><div id="authStatus"></div></form></div></section>
+<section class="section auth-section" id="account"><div class="auth-card"><div><span class="eyebrow">YOUR ACCOUNT</span><h2>Keep your stories<br><em>with you.</em></h2><p>Sign in instantly with Google, or use email if you prefer.</p></div><form id="authForm"><input id="authName" class="signup-only" placeholder="Display name"><input id="authEmail" type="email" placeholder="Email address"><input id="authPassword" type="password" placeholder="Password" minlength="6"><button id="googleBtn" class="google-btn" type="button"><span class="google-icon">G</span> Continue with Google</button><div class="auth-divider"><span>or</span></div><button class="primary" type="submit">Continue with email</button><button type="button" id="switchAuth" class="text-btn">Create an account with email</button><button type="button" id="forgotPassword" class="text-btn">Forgot password?</button><div id="authStatus"></div></form></div></section>
 </main>
 <footer><div class="brand"><span class="brand-mark">N</span><span>Novel<span>Verse</span></span></div><p>Read. Discover. Escape.</p><span>© <span id="year"></span> NovelVerse</span></footer>
 <div id="reader" class="reader hidden"><div class="reader-top"><button id="closeReader">← Library</button><div id="readerTitle"></div><button id="readerFont">A⁺</button></div><article><div class="reader-meta" id="readerMeta"></div><h1 id="chapterTitle"></h1><div id="chapterContent"></div><div class="reader-nav"><button id="prevChapter">← Previous</button><button id="nextChapter">Next →</button></div></article></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-config.js?v=4"></script>
-<script src="script.js?v=4"></script>
+<script src="supabase-config.js?v=5"></script>
+<script src="script.js?v=5"></script>
 <script>setTimeout(function(){var l=document.getElementById('loader');if(l&&!l.classList.contains('hide'))l.classList.add('hide')},5000);</script>
 </body></html>
