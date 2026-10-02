@@ -1,110 +1,27 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Damoma Creative Studio — graphic design, branding, photo editing, video editing and web design.">
-  <title>Damoma Creative Studio</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="A modern online novel and ebook reading platform.">
+<title>NovelVerse — Read. Discover. Escape.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="announcement">Professional creative services • Nigeria & worldwide <span>•</span> Fast response on WhatsApp</div>
-  <header class="site-header">
-    <a class="brand" href="#home" aria-label="Damoma Creative Studio home"><img src="https://raw.githubusercontent.com/lighthousefamily828-netizen/damoma-digital-studio/main/assets/damoma-logo.webp?v=3" alt="Damoma Creative Studio logo"></a>
-    <nav class="desktop-nav" aria-label="Main navigation">
-      <a href="#home">Home</a><a href="#services">Services</a><a href="#portfolio">Portfolio</a><a href="#pricing">Pricing</a><a href="#about">About</a><a href="#contact">Contact</a>
-    </nav>
-    <div class="header-actions"><button class="icon-btn" id="searchBtn" aria-label="Search">⌕</button><button class="account-btn" id="loginBtn"><span>♙</span> Account</button><button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button></div>
-  </header>
-
-  <div class="search-panel" id="searchPanel"><input id="searchInput" type="search" placeholder="Search services, designs, pricing..." autocomplete="off"><button id="searchClose">×</button><div id="searchResults"></div></div>
-  <aside class="mobile-menu" id="mobileMenu" aria-hidden="true">
-    <div class="menu-top"><img src="https://raw.githubusercontent.com/lighthousefamily828-netizen/damoma-digital-studio/main/assets/damoma-logo.webp?v=3" alt="Damoma"><button id="menuClose" aria-label="Close menu">×</button></div>
-    <div class="menu-account"><button id="mobileLogin">♙<span>Account</span></button><a id="mobileAdminBtn" class="hidden" href="admin.html">⚙<span>Admin Dashboard</span></a><a href="#pricing">₦<span>Pricing</span></a><a href="#contact">✉<span>Contact</span></a></div>
-    <div class="menu-links"><a href="#home">⌂ <span>Home</span></a><a href="#services">✦ <span>Services</span></a><a href="#portfolio">▧ <span>Portfolio</span></a><a href="#pricing">₦ <span>Pricing</span></a><a href="#about">◎ <span>About Damoma</span></a><a href="#contact">✉ <span>Contact</span></a></div>
-    <div class="menu-category-title">OUR SERVICES</div>
-    <div class="menu-categories"><a href="#services">Graphic Design <span>›</span></a><a href="#services">Logo & Branding <span>›</span></a><a href="#services">Photo Editing <span>›</span></a><a href="#services">Video Editing <span>›</span></a><a href="#services">Web Design <span>›</span></a></div>
-    <div class="menu-bottom"><a class="wa-link" href="https://wa.me/2349064505247" target="_blank" rel="noopener">WhatsApp Damoma</a><a href="mailto:damilaregodwin2004@gmail.com">Email Support</a></div>
-  </aside>
-  <div class="menu-backdrop" id="menuBackdrop"></div>
-
-  <main id="home">
-    <section class="hero">
-      <div class="hero-motion motion-one"></div><div class="hero-motion motion-two"></div><div class="hero-grid"></div>
-      <div class="hero-content">
-        <div class="eyebrow"><span></span> DAMOMA CREATIVE STUDIO</div>
-        <h1>We turn <em>ideas</em><br>into visual experiences.</h1>
-        <p>Professional graphic design, branding, photo editing, video editing and web design — created to make your brand impossible to ignore.</p>
-        <div class="hero-buttons"><a class="btn btn-gold" href="#services">Explore Services <span>→</span></a><a class="btn btn-glass" href="#contact">Book a Project</a></div>
-        <div class="hero-proof"><div><strong>5+</strong><span>Creative departments</span></div><div><strong>24/7</strong><span>Booking access</span></div><div><strong>100%</strong><span>Creative focus</span></div></div>
-      </div>
-      <div class="hero-badge"><div class="badge-ring">DC</div><span>Creative<br>Studio</span></div>
-    </section>
-
-    <section class="quick-strip"><div><span>✦</span> Premium Design</div><div><span>◈</span> Fast Delivery</div><div><span>◎</span> Client Focused</div><div><span>✧</span> Custom Creativity</div></section>
-
-    <section class="section" id="services">
-      <div class="section-heading"><div><span class="kicker">WHAT WE DO</span><h2>Creative services, <em>built around you.</em></h2></div><a class="see-all" href="#pricing">See pricing →</a></div>
-      <div class="service-grid">
-        <article class="service-card featured"><div class="service-icon">✦</div><span>01</span><h3>Graphic Design</h3><p>Flyers, posters, banners, invitations, social media graphics and promotional designs.</p><a href="#pricing">From ₦7,000 →</a></article>
-        <article class="service-card"><div class="service-icon">◈</div><span>02</span><h3>Logo & Branding</h3><p>Distinctive logos and complete visual identities for businesses, events and organisations.</p><a href="#pricing">From ₦20,000 →</a></article>
-        <article class="service-card"><div class="service-icon">◉</div><span>03</span><h3>Photo Editing</h3><p>Retouching, background replacement, enhancement, manipulation and studio-style edits.</p><a href="#pricing">From ₦2,000 →</a></article>
-        <article class="service-card"><div class="service-icon">▶</div><span>04</span><h3>Video Editing</h3><p>Reels, promotional videos, church/event videos, birthday videos and motion graphics.</p><a href="#pricing">From ₦8,000 →</a></article>
-        <article class="service-card wide"><div class="service-icon">⌘</div><span>05</span><h3>Web Design</h3><p>Modern business, portfolio, booking and e-commerce websites designed for mobile and desktop.</p><a href="#pricing">From ₦100,000 →</a></article>
-      </div>
-    </section>
-
-    <section class="showcase section" id="portfolio">
-      <div class="section-heading"><div><span class="kicker">SELECTED WORK</span><h2>A glimpse of the <em>Damoma look.</em></h2></div><span class="muted">Portfolio categories</span></div>
-      <div class="filter-row"><button class="filter active" data-filter="all">All</button><button class="filter" data-filter="branding">Branding</button><button class="filter" data-filter="events">Events</button><button class="filter" data-filter="social">Social</button><button class="filter" data-filter="photo">Photo</button><button class="filter" data-filter="web">Web</button></div>
-      <div class="portfolio-grid">
-        <article class="work-card work-a" data-cat="branding"><div class="work-art"><span>DC</span><b>BRAND<br>IDENTITY</b></div><div class="work-meta"><strong>Brand Identity</strong><span>Branding</span></div></article>
-        <article class="work-card work-b" data-cat="events"><div class="work-art"><small>THE</small><b>BIG<br>EVENT</b><span>2026</span></div><div class="work-meta"><strong>Event Campaign</strong><span>Events</span></div></article>
-        <article class="work-card work-c" data-cat="social"><div class="work-art"><small>SOCIAL</small><b>MAKE<br>NOISE.</b></div><div class="work-meta"><strong>Social Media Campaign</strong><span>Social</span></div></article>
-        <article class="work-card work-d" data-cat="photo"><div class="work-art"><small>PORTRAIT</small><b>VISUAL<br>STORY</b></div><div class="work-meta"><strong>Portrait Retouching</strong><span>Photo</span></div></article>
-        <article class="work-card work-e" data-cat="web"><div class="work-art"><div class="browser"><i></i><i></i><i></i><hr><strong>YOUR<br>BRAND<br>ONLINE.</strong></div></div><div class="work-meta"><strong>Business Website</strong><span>Web Design</span></div></article>
-        <article class="work-card work-f" data-cat="branding"><div class="work-art"><small>CREATE</small><b>WITH<br>PURPOSE</b><span>DC</span></div><div class="work-meta"><strong>Creative Campaign</strong><span>Branding</span></div></article>
-      </div>
-      <p class="portfolio-note">The portfolio area is ready for your real Damoma projects. Replace these concept cards with your own finished work as projects are added.</p>
-    </section>
-
-    <section class="pricing section" id="pricing">
-      <div class="section-heading"><div><span class="kicker">STARTING PRICES</span><h2>Choose what you <em>need.</em></h2></div><span class="muted">Complex projects receive a custom quote.</span></div>
-      <div class="price-grid">
-        <article class="price-card"><div class="price-top"><span>GRAPHIC DESIGN</span><b>01</b></div><h3>Visual Design</h3><div class="price">₦7,000<span>/ from</span></div><ul><li>Flyers</li><li>Posters & banners</li><li>Social media designs</li><li>Invitations & certificates</li></ul><a class="price-btn" href="#contact" data-service="Graphic Design">Book service</a></article>
-        <article class="price-card highlighted"><div class="popular">POPULAR</div><div class="price-top"><span>BRANDING</span><b>02</b></div><h3>Logo & Identity</h3><div class="price">₦20,000<span>/ from</span></div><ul><li>Logo design</li><li>Brand colour direction</li><li>Business card</li><li>Brand identity packages</li></ul><a class="price-btn" href="#contact" data-service="Logo & Branding">Book service</a></article>
-        <article class="price-card"><div class="price-top"><span>PHOTO / VIDEO</span><b>03</b></div><h3>Media Editing</h3><div class="price">₦2,000<span>/ from</span></div><ul><li>Photo retouching</li><li>Background replacement</li><li>Short video edits</li><li>Promotional videos</li></ul><a class="price-btn" href="#contact" data-service="Media Editing">Book service</a></article>
-        <article class="price-card"><div class="price-top"><span>WEB DESIGN</span><b>04</b></div><h3>Digital Presence</h3><div class="price">₦100,000<span>/ from</span></div><ul><li>Landing pages</li><li>Business websites</li><li>Portfolio websites</li><li>Booking & e-commerce systems</li></ul><a class="price-btn" href="#contact" data-service="Web Design">Book service</a></article>
-      </div>
-    </section>
-
-    <section class="packages section">
-      <div class="package-intro"><span class="kicker">CURATED PACKAGES</span><h2>More value when your project needs <em>more than one thing.</em></h2><p>We can combine design services into one clear package for launches, events, businesses and social campaigns.</p></div>
-      <div class="package-list">
-        <article><span>01</span><div><h3>Starter Business</h3><p>Logo + flyer + business card + 2 social designs.</p></div><strong>₦35,000</strong></article>
-        <article><span>02</span><div><h3>Brand Launch</h3><p>Premium logo + identity direction + stationery + social kit.</p></div><strong>₦100,000</strong></article>
-        <article><span>03</span><div><h3>Social Media Starter</h3><p>Five branded social media graphics for your next campaign.</p></div><strong>₦25,000</strong></article>
-        <article><span>04</span><div><h3>Event Package</h3><p>Main flyer + social version + WhatsApp status + promotional graphics.</p></div><strong>₦30,000+</strong></article>
-      </div>
-    </section>
-
-    <section class="about section" id="about"><div class="about-card"><div class="about-logo"><img src="https://raw.githubusercontent.com/lighthousefamily828-netizen/damoma-digital-studio/main/assets/damoma-logo.webp?v=3" alt="Damoma logo"></div><div><span class="kicker">ABOUT DAMOMA</span><h2>Creative work with <em>purpose.</em></h2><p>Damoma Creative Studio is a growing digital creative studio focused on turning ideas, businesses, events and personal moments into polished visual experiences.</p><div class="about-points"><span>✓ Professional presentation</span><span>✓ Clear communication</span><span>✓ Custom creative direction</span><span>✓ Mobile-first digital experiences</span></div></div></div></section>
-
-    <section class="booking section" id="contact">
-      <div class="booking-card">
-        <div><span class="kicker">START A PROJECT</span><h2>Have an idea?<br><em>Let's create it.</em></h2><p>Tell us what you need. We’ll review the brief and get back to you.</p><div class="contact-actions"><a href="https://wa.me/2349064505247" target="_blank" rel="noopener" class="contact-link gold">WhatsApp <span>→</span></a><a href="mailto:damilaregodwin2004@gmail.com" class="contact-link">Email <span>→</span></a></div></div>
-        <form id="bookingForm"><label>Name<input name="name" required placeholder="Your name"></label><label>Email / WhatsApp<input name="contact" required placeholder="How can we reach you?"></label><label>Service<select name="service" id="serviceSelect"><option value="">Select a service</option><option>Graphic Design</option><option>Logo & Branding</option><option>Photo Editing</option><option>Video Editing</option><option>Web Design</option></select></label><label>Project details<textarea name="details" required placeholder="Tell us what you want designed..."></textarea></label><button class="btn btn-gold full" type="submit">Send Project Request →</button><small>Your project request is saved securely and your WhatsApp brief opens automatically.</small></form>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer"><div class="footer-brand"><img src="https://raw.githubusercontent.com/lighthousefamily828-netizen/damoma-digital-studio/main/assets/damoma-logo.webp?v=3" alt="Damoma Creative Studio"><p>Design. Create. Elevate.</p></div><div><h4>Explore</h4><a href="#services">Services</a><a href="#portfolio">Portfolio</a><a href="#pricing">Pricing</a><a href="#about">About</a></div><div><h4>Services</h4><a href="#services">Graphic Design</a><a href="#services">Branding</a><a href="#services">Photo Editing</a><a href="#services">Web Design</a></div><div><h4>Contact</h4><a href="https://wa.me/2349064505247" target="_blank" rel="noopener">09064505247</a><a href="mailto:damilaregodwin2004@gmail.com">damilaregodwin2004@gmail.com</a></div><div class="copyright">© 2026 Damoma Creative Studio. All rights reserved.</div></footer>
-
-  <div class="login-modal" id="loginModal" aria-hidden="true"><div class="modal-backdrop" data-close></div><div class="modal"><button class="modal-close" data-close>×</button><img src="https://raw.githubusercontent.com/lighthousefamily828-netizen/damoma-digital-studio/main/assets/damoma-logo.webp?v=3" alt="Damoma"><span class="kicker">CLIENT ACCOUNT</span><h2>Welcome back.</h2><p>Login/signup will be connected to Supabase Auth in the next build step.</p><input type="email" placeholder="Email address"><input type="password" placeholder="Password"><button class="btn btn-gold full" id="demoLogin">Login</button><div class="or">OR</div><button class="social-login">Continue with Google</button><button class="create-account" id="demoCreate">Create an Account</button></div></div>
-  <div class="toast" id="toast"></div>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="app.js?v=20260928-admin"></script>
-</body>
-</html>
+<div id="loader"><div class="loader-mark">N</div><span>Loading your library…</span></div>
+<header class="topbar"><a class="brand" href="#home"><span class="brand-mark">N</span><span>Novel<span>Verse</span></span></a><div class="search"><span>⌕</span><input id="search" placeholder="Search what you want" autocomplete="off"></div><nav><a href="#library">Library</a><button id="authBtn" class="ghost">Sign in</button></nav><button id="menuBtn" class="menu">☰</button></header>
+<div class="genres" id="genres"><button class="active" data-genre="all">All</button><button>Romance</button><button>Werewolf</button><button>Mafia</button><button>System</button><button>Fantasy</button><button>Sci-Fi</button><button>Action</button><button>Mystery</button><button>Historical</button></div>
+<main>
+<section class="hero" id="home"><div><span class="eyebrow">YOUR NEXT ESCAPE STARTS HERE</span><h1>Stories that keep<br><em>you turning pages.</em></h1><p>Discover web novels, romance, fantasy, mafia, werewolf, system stories and more — all in one beautiful reading library.</p><div class="hero-actions"><a class="primary" href="#browse">Explore novels →</a><a class="secondary" href="#library">My library</a></div></div><div class="hero-books"><div class="book b1">THE<br><strong>LAST<br>KINGDOM</strong><small>FANTASY</small></div><div class="book b2">AFTER<br><strong>MIDNIGHT</strong><small>ROMANCE</small></div><div class="book b3">SYSTEM<br><strong>REBOOT</strong><small>ACTION</small></div></div></section>
+<section class="section" id="browse"><div class="section-head"><div><span class="eyebrow">DISCOVER</span><h2>Trending <em>right now.</em></h2></div><span class="muted" id="resultCount"></span></div><div id="novelGrid" class="novel-grid"><div class="loading-card">Loading novels…</div></div></section>
+<section class="section dark-section"><div class="section-head"><div><span class="eyebrow">GENRES</span><h2>Find your <em>kind of story.</em></h2></div></div><div class="genre-grid"><a href="#browse" data-genre-link="Romance">♥<strong>Romance</strong><small>Love, drama & desire</small></a><a href="#browse" data-genre-link="Werewolf">☾<strong>Werewolf</strong><small>Mates, packs & destiny</small></a><a href="#browse" data-genre-link="Mafia">♠<strong>Mafia</strong><small>Power, danger & loyalty</small></a><a href="#browse" data-genre-link="Fantasy">✦<strong>Fantasy</strong><small>Magic & impossible worlds</small></a><a href="#browse" data-genre-link="System">◈<strong>System</strong><small>Levels, quests & power</small></a><a href="#browse" data-genre-link="Mystery">⌕<strong>Mystery</strong><small>Secrets & investigations</small></a></div></section>
+<section class="section" id="library"><div class="section-head"><div><span class="eyebrow">YOUR SPACE</span><h2>Your <em>library.</em></h2></div></div><div id="libraryGrid" class="novel-grid"><div class="empty">Sign in to save novels and continue reading across devices.</div></div></section>
+<section class="section auth-section" id="account"><div class="auth-card"><div><span class="eyebrow">YOUR ACCOUNT</span><h2>Keep your stories<br><em>with you.</em></h2><p>Create an account or sign in to save bookmarks and reading progress.</p></div><form id="authForm"><input id="authName" class="signup-only" placeholder="Display name"><input id="authEmail" type="email" placeholder="Email address" required><input id="authPassword" type="password" placeholder="Password" minlength="6" required><button class="primary" type="submit">Continue</button><button type="button" id="switchAuth" class="text-btn">Create an account</button><div id="authStatus"></div></form></div></section>
+</main>
+<footer><div class="brand"><span class="brand-mark">N</span><span>Novel<span>Verse</span></span></div><p>Read. Discover. Escape.</p><span>© <span id="year"></span> NovelVerse</span></footer>
+<div id="reader" class="reader hidden"><div class="reader-top"><button id="closeReader">← Library</button><div id="readerTitle"></div><button id="readerFont">A⁺</button></div><article><div class="reader-meta" id="readerMeta"></div><h1 id="chapterTitle"></h1><div id="chapterContent"></div><div class="reader-nav"><button id="prevChapter">← Previous</button><button id="nextChapter">Next →</button></div></article></div>\script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="script.js"></script>
+</body></html>
