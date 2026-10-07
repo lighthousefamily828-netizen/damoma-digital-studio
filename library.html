@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>My Library — INKORA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="novel.css"><link rel="stylesheet" href="library.css">
+</head>
+<body>
+<header class="site-header"><a class="brand" href="novel.html"><span class="brand-mark">I</span><span>INKORA</span></a>
+<nav><a href="novel.html">Home</a><a href="novel.html#discover">Discover</a><a href="novel.html#genres">Genres</a><a class="active" href="library.html">My Library</a></nav>
+<div class="header-actions"><button id="accountBtn" class="account-btn">Account</button><button id="menuBtn" class="menu-btn">☰</button></div></header>
+<main class="library-page">
+<section class="library-hero"><p class="eyebrow">YOUR COLLECTION</p><h1>My Library</h1><p>Keep your favorite stories close and pick up exactly where you stopped.</p></section>
+<div id="loginGate" class="library-state hidden"><h2>Sign in to view your library</h2><p>Your bookmarks and reading progress are saved to your INKORA account.</p><a class="primary-btn" href="index.html">Sign In</a></div>
+<section id="libraryContent" class="hidden">
+<div class="library-section"><div class="section-heading"><h2>Continue Reading</h2><span id="progressCount"></span></div><div id="continueGrid" class="library-grid"></div></div>
+<div class="library-section"><div class="section-heading"><h2>Saved Stories</h2><span id="bookmarkCount"></span></div><div id="bookmarkGrid" class="library-grid"></div></div>
+<div id="emptyLibrary" class="library-state hidden"><h2>Your library is waiting</h2><p>Open a story and tap Save to Library to start building your collection.</p><a class="primary-btn" href="novel.html">Discover Stories</a></div>
+</section>
+<div id="loadingState" class="library-state"><div class="loader"></div><p>Loading your library…</p></div>
+</main>
+<footer class="site-footer"><div class="footer-brand">INKORA</div><p>Where every story finds a reader.</p></footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="library.js"></script>
+</body></html>
