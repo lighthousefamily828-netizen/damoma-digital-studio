@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="description" content="Read and discover stories on INKORA.">
+<title>Story — INKORA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="novel-detail.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<div class="page-glow"></div>
+<header class="nav">
+<a class="logo" href="novel.html"><span class="logo-mark">I</span><span>INKORA</span></a>
+<nav><a href="novel.html">Home</a><a href="novel.html#discover">Discover</a><a href="novel.html#genres">Genres</a><a href="library.html">My Library</a></nav>
+<div class="nav-actions"><a class="back" href="novel.html">← Back</a><button class="account" id="accountBtn">G</button></div>
+</header>
+<main>
+<section class="detail" id="detail">
+<div class="cover-wrap"><div class="cover" id="cover"><span>INKORA</span><strong>Loading...</strong></div></div>
+<div class="info">
+<div class="crumb">INKORA / <span id="genre">STORY</span></div>
+<h1 id="title">Loading story...</h1>
+<p class="author">By <b id="author">—</b></p>
+<div class="meta"><span id="rating">★ —</span><span id="status">—</span><span id="views">— views</span><span id="count">— chapters</span></div>
+<p class="synopsis" id="synopsis">Loading synopsis...</p>
+<div class="actions"><button class="primary" id="readBtn">Start Reading →</button><button class="secondary" id="saveBtn">♡ Save to Library</button></div>
+<p class="progress-note" id="progressNote"></p>
+</div>
+</section>
+<section class="chapters">
+<div class="section-head"><div><span class="kicker">CHAPTERS</span><h2>Begin the <em>journey.</em></h2></div><span id="chapterTotal"></span></div>
+<div id="chapterList" class="chapter-list"><div class="loading">Loading chapters...</div></div>
+</section>
+</main>
+<footer><a class="logo" href="novel.html"><span class="logo-mark">I</span><span>INKORA</span></a><p>Where every story finds a reader.</p><span>© 2026 INKORA</span></footer>
+<script src="novel-detail.js"></script>
+</body>
+</html>
